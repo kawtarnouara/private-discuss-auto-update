@@ -107,7 +107,7 @@ exports.createWindow =  function(dev = true) {
             nodeIntegration: true
         }
     });
-    splash.loadURL(`file://${__dirname}/assets/splash.html?connection=1`);
+    splash.loadURL(`file://${__dirname}/assets/splash_private.html?connection=1`);
 
     // win.loadURL(`http://openproject.piman2-0.fr`);
 

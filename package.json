@@ -1,7 +1,7 @@
 {
   "name": "discuss",
   "description": "Private Discuss, La solution de communication privee, dediee, sur mesure et chiffree",
-  "version": "4.0.1",
+  "version": "4.0.4",
   "main": "./main.js",
   "author": "Piman Security",
   "scripts": {
@@ -29,7 +29,7 @@
   "deploy": "electron-builder build --mac --win --publish always",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kawtarnouara/discuss-auto-update.git"
+    "url": "https://github.com/kawtarnouara/private-discuss-auto-update.git"
   },
   "mac": {
     "title": "Private Discuss",

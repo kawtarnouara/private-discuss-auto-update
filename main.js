@@ -55,7 +55,7 @@ ipcMain.on('online-status-changed', (event, status) => {
     // console.log(status);
     if (status === 'online' && currentStatus !== 'online') {
     currentStatus = 'online';
-    splash.loadURL(`file://${__dirname}/assets/splash.html?connection=1`);
+    splash.loadURL(`file://${__dirname}/assets/splash_private.html?connection=1`);
     console.info(`file://${__dirname}/dist/index.html`)
     win.loadURL(`file://${__dirname}/dist/index.html`);
     // win.loadURL(`https://piman.private-discuss.com`);
@@ -71,7 +71,7 @@ ipcMain.on('online-status-changed', (event, status) => {
 });
 } else if (status === 'offline' && currentStatus !== 'offline') {
     currentStatus = 'offline';
-    splash.loadURL(`file://${__dirname}/assets/splash.html?connection=0`);
+    splash.loadURL(`file://${__dirname}/assets/splash_private.html?connection=0`);
 }
 });
 
