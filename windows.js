@@ -257,6 +257,7 @@ function getMenuBeforeAuth(win) {
             {label: "À propos de Private Discuss", selector: "orderFrontStandardAboutPanel:"},
             {
                 label: "Vérifier les mises à jour",  click: function () {
+                    showNoUpdatesDialog = true;
                     autoUpdater.checkForUpdatesAndNotify();
                 }
             },
@@ -300,6 +301,7 @@ function getMenuAfterAuth(win) {
             {label: "À propos de Private Discuss", selector: "orderFrontStandardAboutPanel:"},
             {
                 label: "Vérifier les mises à jour",  click: function () {
+                    showNoUpdatesDialog = true;
                     autoUpdater.checkForUpdatesAndNotify();
                 }
             },
