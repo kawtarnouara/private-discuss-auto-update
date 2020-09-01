@@ -1,7 +1,7 @@
 {
-  "name": "discuss",
+  "name": "private-discuss",
   "description": "Private Discuss, La solution de communication privee, dediee, sur mesure et chiffree",
-  "version": "4.1.2",
+  "version": "4.1.5",
   "main": "./main.js",
   "author": "Piman Security",
   "scripts": {
