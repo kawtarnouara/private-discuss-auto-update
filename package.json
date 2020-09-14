@@ -39,6 +39,7 @@
       "entitlementsInherit": "./build/entitlements.mac.inherit.plist"
     },
     "linux": {
+      "icon": "build/icons/Icon-512x512.png",
       "category": "productivity",
       "target": [
         "AppImage"
