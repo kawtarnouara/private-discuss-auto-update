@@ -1,13 +1,14 @@
 {
   "name": "private-discuss",
   "description": "Private Discuss, La solution de communication privee, dediee, sur mesure et chiffree",
-  "version": "4.1.5",
+  "version": "4.1.7",
   "main": "./main.js",
-  "author": "Piman Security",
+  "author": "Piman Security <contact@piman-group.fr>",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder --publish never",
-    "deploy": "electron-builder --publish always"
+    "deploy": "electron-builder --publish always",
+    "dist:linux": "electron-builder --linux"
   },
   "dependencies": {
     "electron-context-menu": "^0.9.1",
@@ -37,20 +38,24 @@
       "entitlements": "./build/entitlements.mac.plist",
       "entitlementsInherit": "./build/entitlements.mac.inherit.plist"
     },
+    "linux": {
+      "category": "productivity",
+      "target": [
+        "AppImage"
+      ]
+    },
     "directories": {
       "output": "app",
       "buildResources": "build"
     },
-    "productName": "Private Discuss",
-    "afterSign": "/Users/kawtar/apps/private-discuss-electron-update/electron/notarize.js"
+    "productName": "Private Discuss"
   },
   "mac": {
     "title": "Piman Discuss",
     "hardenedRuntime": true,
     "gatekeeperAssess": false,
     "entitlements": "build/entitlements.mac.plist",
-    "entitlementsInherit": "build/entitlements.mac.inherit.plist",
-    "afterSign": "/Users/kawtar/apps/private-discuss-electron-update/electron/notarize.js"
+    "entitlementsInherit": "build/entitlements.mac.inherit.plist"
   },
   "mas": {
     "entitlements": "build/entitlements.mac.plist",
