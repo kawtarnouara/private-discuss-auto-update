@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/icon?family=Roboto" rel="stylesheet">
     <style>
+        body {
+            font-family: Roboto, sans-serif !important;
+        }
         button{
             display: inline-block;
             margin-bottom: 0;
@@ -22,8 +26,8 @@
         }
         .update-btn{
             color: #fff;
-            border-color: #2e6da4;
-            background-color: #337ab7;
+            border-color:  #33C2AF;
+            background-color:  #33C2AF;
         }
         .cancel-btn{
             margin-right: 10px;
@@ -100,7 +104,7 @@
 
 
     const description_info = document.getElementById('description');
-    description_info.innerText = findGetParameter('description');
+    description_info.innerHTML = findGetParameter('details');
 
 
 
