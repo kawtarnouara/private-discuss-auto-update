@@ -11,8 +11,9 @@ let splash;
 let result;
 let mainurl;
 let mainev;
-if (process.platform === 'win32') {
+if (process.platform === 'win32'){
     app.setAsDefaultProtocolClient('private-discuss');
+
     const primaryInstance = app.requestSingleInstanceLock();
     if (!primaryInstance) {
         app.quit();
@@ -23,8 +24,8 @@ if (process.platform === 'win32') {
     app.on('second-instance', (event, args) => {
         if (args.slice(1) && args.slice(1)[2]){
             mainurl = args.slice(1)[2]
-            win.webContents.send('redirect-to-url', mainurl);
             if(win){
+                win.webContents.send('open-window', mainurl);
                 if(win.isMinimized()){
                     win.restore();
                 }
@@ -32,12 +33,20 @@ if (process.platform === 'win32') {
             }
         }
     });
-
 }
 // Create window on electron intialization
 app.on('open-url', function (ev, url) {
+    ev.preventDefault();
     mainev = ev; mainurl = url;
-
+    if (app.isReady()){
+        if(win){
+            win.webContents.send('open-window', mainurl);
+            if(win.isMinimized()){
+                win.restore();
+            }
+            win.focus();
+        }
+    }
 });
 // Create window on electron intialization
 app.on('ready', async () => {

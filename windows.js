@@ -4,7 +4,7 @@ const { downloadManager } = require('./download');
 const path = require('path');
 const urlM = require('url');
 const {autoUpdater} = require("electron-updater");
-
+let { showNoUpdatesDialog } = require('./updater');
 exports.createWindow =  function(i18n, dev = true) {
     // Setup permission handler
     session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
