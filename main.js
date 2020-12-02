@@ -9,6 +9,45 @@ let dev = false;
 let win;
 let splash;
 let result;
+let mainurl;
+let mainev;
+if (process.platform === 'win32'){
+    app.setAsDefaultProtocolClient('private-discuss');
+
+    const primaryInstance = app.requestSingleInstanceLock();
+    if (!primaryInstance) {
+        app.quit();
+        return;
+    }
+
+// The primary instance of the application will run this code, not the new  instance
+    app.on('second-instance', (event, args) => {
+        if (args.slice(1) && args.slice(1)[2]){
+            mainurl = args.slice(1)[2]
+            if(win){
+                win.webContents.send('open-window', mainurl);
+                if(win.isMinimized()){
+                    win.restore();
+                }
+                win.focus();
+            }
+        }
+    });
+}
+// Create window on electron intialization
+app.on('open-url', function (ev, url) {
+    ev.preventDefault();
+    mainev = ev; mainurl = url;
+    if (app.isReady()){
+        if(win){
+            win.webContents.send('open-window', mainurl);
+            if(win.isMinimized()){
+                win.restore();
+            }
+            win.focus();
+        }
+    }
+});
 // Create window on electron intialization
 app.on('ready', async () => {
     i18n.on('loaded', (loaded) => {
@@ -29,7 +68,15 @@ app.on('ready', async () => {
     // console.log('result ----------------' , result);
     console.log('token ----------------' , process.env.GH_TOKEN);
     splash = result.splash;
+    if (process.platform === 'win32' &&  process.argv.slice(1) &&  process.argv.slice(1)[0]){
+        mainurl = process.argv.slice(1)[0]
+    }
     win = result.win;
+    win.webContents.on('did-finish-load', () => {
+        if (mainurl) {
+            win.webContents.send('redirect-to-url', mainurl);
+        }
+    });
 });
 
 
