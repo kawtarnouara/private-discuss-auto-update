@@ -34,8 +34,8 @@ exports.createWindow =  function(i18n, dev = true) {
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
-            nativeWindowOpen: true
-            // enableRemoteModule: false,
+            nativeWindowOpen: true,
+             enableRemoteModule: true
             // contextIsolation: true,
         },
         center: true,
