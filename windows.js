@@ -29,13 +29,13 @@ exports.createWindow =  function(i18n, dev = true) {
         minWidth: 1000,
         minHeight: 600,
         backgroundColor: '#ffffff',
-        icon: `file://${__dirname}/icons/piman_k9o_icon.icns`,
+        icon: `file://${__dirname}/build/icon.icns`,
         nodeIntegration: 'iframe',
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
-            nativeWindowOpen: true
-            // enableRemoteModule: false,
+            nativeWindowOpen: true,
+            enableRemoteModule: true,
             // contextIsolation: true,
         },
         center: true,
