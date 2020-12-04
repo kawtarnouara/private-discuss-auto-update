@@ -54,6 +54,7 @@
       "buildResources": "build"
     },
     "productName": "Private Discuss",
+    "afterSign": "/Users/kawtar/apps/private-discuss-electron-update/electron/notarize.js",
     "protocols": [
       {
         "name": "Private discuss",
@@ -68,7 +69,8 @@
     "hardenedRuntime": true,
     "gatekeeperAssess": false,
     "entitlements": "build/entitlements.mac.plist",
-    "entitlementsInherit": "build/entitlements.mac.inherit.plist"
+    "entitlementsInherit": "build/entitlements.mac.inherit.plist",
+    "afterSign": "/Users/kawtar/apps/private-discuss-electron-update/electron/notarize.js"
   },
   "mas": {
     "entitlements": "build/entitlements.mac.plist",
