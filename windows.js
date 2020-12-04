@@ -35,7 +35,7 @@ exports.createWindow =  function(i18n, dev = true) {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
             nativeWindowOpen: true,
-            enableRemoteModule: true,
+             enableRemoteModule: true
             // contextIsolation: true,
         },
         center: true,
