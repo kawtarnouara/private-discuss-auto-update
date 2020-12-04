@@ -1,7 +1,7 @@
 {
   "name": "private-discuss",
   "description": "Private Discuss, La solution de communication privee, dediee, sur mesure et chiffree",
-  "version": "4.3.6",
+  "version": "4.3.9",
   "main": "./main.js",
   "author": "PRIVATE DISCUSS <contact@piman-group.fr>",
   "scripts": {
