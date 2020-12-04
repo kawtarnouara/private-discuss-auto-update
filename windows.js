@@ -4,7 +4,7 @@ const { downloadManager } = require('./download');
 const path = require('path');
 const urlM = require('url');
 const {autoUpdater} = require("electron-updater");
-let { showNoUpdatesDialog } = require('./updater');
+const {getUpdateInfo } = require('./updater');
 exports.createWindow =  function(i18n, dev = true) {
     // Setup permission handler
     session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
@@ -259,7 +259,7 @@ function getMenuBeforeAuth(win, i18n) {
             {label: i18n.t('about'), selector: "orderFrontStandardAboutPanel:"},
             {
                 label: i18n.t('update'),  click: function () {
-                    showNoUpdatesDialog = true;
+                    getUpdateInfo(true);
                     autoUpdater.checkForUpdatesAndNotify()
                 }
             },
@@ -303,7 +303,7 @@ function getMenuAfterAuth (win, i18n) {
             {label: i18n.t('about'), selector: "orderFrontStandardAboutPanel:"},
             {
                 label: i18n.t('update'),  click: function () {
-                    showNoUpdatesDialog = true;
+                    getUpdateInfo(true);
                     autoUpdater.checkForUpdatesAndNotify()
                 }
             },
