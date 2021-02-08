@@ -1,0 +1,18 @@
+.logo{
+    width: 90px !important;
+
+}
+.logo img{
+height: 90px !important;
+  }
+
+.title{
+    margin-bottom: 10px;
+    margin-top: 10px;
+    color: black;
+    font-size: 14px;
+}
+
+.description{
+    display: none;
+}

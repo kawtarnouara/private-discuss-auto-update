@@ -1,3 +1,5 @@
+const  openAboutWindow = require("about-window").default;
+
 const {app, BrowserWindow, Menu, session } = require('electron');
 const ProgressBar = require('electron-progressbar');
 const { downloadManager } = require('./download');
@@ -11,7 +13,7 @@ exports.createWindow =  function(i18n, dev = true) {
         return true;
     });
     // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-    //     callback({
+    //     callbacfk({
     //         responseHeaders: {
     //             ...details.responseHeaders,
     //             'Content-Security-Policy': ['default-src \'none\'']
@@ -256,7 +258,19 @@ function getMenuBeforeAuth(win, i18n) {
     return [{
         label: i18n.t('application'),
         submenu: [
-            {label: i18n.t('about'), selector: "orderFrontStandardAboutPanel:"},
+            {label: i18n.t('about'), click: function ()
+                {
+                    openAboutWindow({
+                        icon_path: `C:\\Users\\Piman\\Documents\\Discuss\\private-discuss-auto-update\\assets\\private_icon.png`,
+                        product_name: 'Private Discuss',
+                        copyright: 'Copyright © 2021 PRIVATE DISCUSS',
+                        css_path: `../../assets/custom-about.css`,
+                        win_options: {
+                            width: 290,
+                            height: 200
+                        }
+                    });
+                }},
             {
                 label: i18n.t('update'),  click: function () {
                     showNoUpdatesDialog = true;
@@ -300,7 +314,19 @@ function getMenuAfterAuth (win, i18n) {
     return [{
         label: i18n.t('application'),
         submenu: [
-            {label: i18n.t('about'), selector: "orderFrontStandardAboutPanel:"},
+            {label: i18n.t('about'), click: function ()
+    {
+        openAboutWindow({
+            icon_path: `C:\\Users\\Piman\\Documents\\Discuss\\private-discuss-auto-update\\assets\\private_icon.png`,
+            product_name: 'Private Discuss',
+            copyright: 'Copyright © 2021 PRIVATE DISCUSS',
+            css_path: `../../assets/custom-about.css`,
+            win_options: {
+                width: 290,
+                height: 200
+            }
+        });
+    }},
             {
                 label: i18n.t('update'),  click: function () {
                     showNoUpdatesDialog = true;

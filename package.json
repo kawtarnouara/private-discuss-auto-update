@@ -1,7 +1,7 @@
 {
   "name": "private-discuss",
   "description": "Private Discuss, La solution de communication privee, dediee, sur mesure et chiffree",
-  "version": "4.3.0",
+  "version": "5.0.8",
   "main": "./main.js",
   "author": "PRIVATE DISCUSS",
   "scripts": {
@@ -10,10 +10,12 @@
     "deploy": "electron-builder --publish always"
   },
   "dependencies": {
+    "about-window": "^1.13.4",
     "electron-context-menu": "^0.9.1",
     "electron-dl": "^1.12.0",
     "electron-progressbar": "^1.1.0",
     "electron-updater": "^4.0.0",
+    "electron-windows-badge": "^1.1.0",
     "fs": "0.0.1-security",
     "i18next": "^19.7.0",
     "i18next-node-fs-backend": "^2.1.3",
@@ -38,19 +40,27 @@
       "entitlements": "./build/entitlements.mac.plist",
       "entitlementsInherit": "./build/entitlements.mac.inherit.plist"
     },
-    "win":{
-      "target": "msi"
+    "win": {
+      "icon": "./build/icon.ico",
+      "target": "nsis",
+      "certificateSubjectName": "SECURED BY PIMAN SECURITY SAS",
+      "signingHashAlgorithms": [
+        "sha256"
+      ],
+      "publisherName": "PRIVATE DISCUSS",
+      "signAndEditExecutable": true
     },
     "directories": {
       "output": "app",
       "buildResources": "build"
     },
     "productName": "Private Discuss",
-    "afterSign": "/Users/kawtar/apps/private-discuss-electron-update/electron/notarize.js",
     "protocols": [
       {
         "name": "Private discuss",
-        "schemes": ["private-discuss"]
+        "schemes": [
+          "private-discuss"
+        ]
       }
     ]
   },
@@ -59,8 +69,7 @@
     "hardenedRuntime": true,
     "gatekeeperAssess": false,
     "entitlements": "build/entitlements.mac.plist",
-    "entitlementsInherit": "build/entitlements.mac.inherit.plist",
-    "afterSign": "/Users/kawtar/apps/private-discuss-electron-update/electron/notarize.js"
+    "entitlementsInherit": "build/entitlements.mac.inherit.plist"
   },
   "mas": {
     "entitlements": "build/entitlements.mac.plist",
