@@ -1,7 +1,7 @@
 {
   "name": "private-discuss",
   "description": "Private Discuss, La solution de communication privee, dediee, sur mesure et chiffree",
-  "version": "5.0.8",
+  "version": "6.3.9",
   "main": "./main.js",
   "author": "PRIVATE DISCUSS",
   "scripts": {
@@ -74,7 +74,7 @@
     ]
   },
   "mac": {
-    "title": "Piman Discuss",
+    "title": "Private Discuss",
     "hardenedRuntime": true,
     "gatekeeperAssess": false,
     "entitlements": "build/entitlements.mac.plist",
@@ -86,6 +86,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kawtarnouara/private-discuss-auto-update.git"
+    "url": "https://github.com/kawtarnouara/test-update-prompt.git"
   }
 }

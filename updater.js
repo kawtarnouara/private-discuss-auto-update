@@ -3,14 +3,14 @@ const {autoUpdater} = require("electron-updater");
 const ProgressBar = require('electron-progressbar');
 const { BrowserWindow } = require('electron')
 const { dialog } = require('electron')
+var showNoUpdatesDialog = false;
 var dialogUpdate;
 var dialogCheckUpdate;
-var showNoUpdatesDialog = false;
 let backendData;
 let autoUpdateVersion;
 exports.initUpdater = (mainWindow) => {
     getUpdateInfo(false);
-    autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "Yra7hy4NWZPvgsNFWWo_" };
+//s    autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "Yra7hy4NWZPvgsNFWWo_" };
     autoUpdater.autoDownload = false;
     autoUpdater.checkForUpdatesAndNotify();
     let progressBar;
@@ -37,21 +37,23 @@ exports.initUpdater = (mainWindow) => {
             });
         } else  if (showNoUpdatesDialog){
             dialog.showMessageBox({
-                title: 'Piman Discuss',
-                message: 'Piman Discuss est à jour.',
+                title: 'Private Discuss',
+                message: 'Private Discuss est à jour.',
                 detail: 'Version ' + app.getVersion()
             });
         }
     });
     autoUpdater.on('update-not-available', () => {
+
         if (showNoUpdatesDialog){
             dialog.showMessageBox({
-                title: 'Piman Discuss',
-                message: 'Piman Discuss est à jour.',
+                title: 'Private Discuss',
+                message: 'Private Discuss est à jour.',
                 detail: 'Version ' + app.getVersion()
             });
         }
     });
+
     autoUpdater.on('error', (err) => {
         // sendStatusToWindow('Error in auto-updater. ' + err);
         // mainWindow.webContents.send('update_error');
@@ -60,7 +62,7 @@ exports.initUpdater = (mainWindow) => {
         }
         updateDialog('Mise à jour - Private Discuss', {
             title: 'Mise à jour échouée',
-            details: "Impossible de terminer la mises à jour de votre application !",
+            details: "Impossible de terminer la mises à jour de votre application ! ",
             withButtons: 0,
             success : 0
         });
@@ -85,7 +87,8 @@ exports.initUpdater = (mainWindow) => {
         if (progressBar){
             progressBar.close();
         }
-         dialogUpdate = updateDialog('Mise à jour - Private Discuss', {
+
+        dialogUpdate = updateDialog('Mise à jour - Private Discuss', {
             title: 'Mise à jour terminée',
             details: "Votre application a été mise à jour. Vous devez redémarrer l'application maintenant",
             withButtons: 1,
@@ -103,6 +106,7 @@ exports.initUpdater = (mainWindow) => {
         });
     });
 
+
     ipcMain.on('cancel_update', () => {
         dialogCheckUpdate.destroy();
         dialogCheckUpdate = null;
@@ -116,7 +120,7 @@ exports.initUpdater = (mainWindow) => {
         if (!progressBar) {
             progressBar = new ProgressBar({
                 indeterminate: false,
-                title: 'Mise à jour - Piman Discuss',
+                title: 'Mise à jour - Private Discuss',
                 text: 'En téléchargement ...',
                 detail: 'Préparation de la nouvelle version ...',
                 closeOnComplete: false,
@@ -170,37 +174,6 @@ function updateDialog(dialogTitle, options) {
     return dialogFile;
 }
 
-exports.getUpdateInfo = getUpdateInfo = (showNoUpdates)  => {
-    showNoUpdatesDialog = showNoUpdates;
-    const { net } = require('electron')
-    var body = JSON.stringify({ platform: 'desktop', os: 'macos'});
-    const request = net.request({
-        method: 'POST',
-        url: 'https://api-v2.private-discuss.com/v1.0/release/get',
-        protocol: 'https:',
-    });
-    request.on('response', (response) => {
-        console.log(`STATUS: ${response.statusCode} ${response.toString()}`);
-        console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
-
-        response.on('data', (chunk) => {
-            console.log(showNoUpdatesDialog, showNoUpdatesDialog)
-            console.log(`BODY: ${JSON.parse(chunk.toString()).result.data}`)
-            backendData = JSON.parse(chunk.toString()).result.data;
-        });
-        response.on('error', (error) => {
-            console.log('error :' + JSON.stringify(error))
-        });
-    });
-    request.on('error', (error) => {
-        console.log('error :' + JSON.stringify(error))
-    });
-    request.setHeader('Content-Type', 'application/json');
-    request.write(body, 'utf-8');
-    request.end();
-
-}
-
 function checkupdateDialog  (dialogTitle, options)   {
     let dialogFile = new BrowserWindow({
         title: dialogTitle,
@@ -224,12 +197,43 @@ function checkupdateDialog  (dialogTitle, options)   {
     return dialogFile;
 }
 
+exports.getUpdateInfo = getUpdateInfo = (showNoUpdates)  => {
+    showNoUpdatesDialog = showNoUpdates;
+    const { net } = require('electron')
+    var body = JSON.stringify({ platform: 'desktop', os: 'windows'});
+    const request = net.request({
+        method: 'POST',
+        url: 'https://api.sand.private-discuss.com/v1.0/release/get' ,
+        protocol: 'https:',
+    });
+    request.on('response', (response) => {
+        console.log(`STATUS: ${response.statusCode} ${response.toString()}`);
+        console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
+
+        response.on('data', (chunk) => {
+            console.log(`BODY: ${JSON.stringify(JSON.parse(chunk.toString()))}`)
+            backendData = JSON.parse(chunk.toString()).result.data;
+        });
+        response.on('error', (error) => {
+            console.log('error :' + JSON.stringify(error))
+        });
+    });
+    request.on('error', (error) => {
+        console.log('error :' + JSON.stringify(error))
+    });
+    request.setHeader('Content-Type', 'application/json');
+    request.write(body, 'utf-8');
+    request.end();
+
+}
+
 function encodeQueryData(data) {
     const ret = [];
     for (let d in data)
         ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
     return ret.join('&');
 }
+
 
 function versionCompare(v1, v2, options = {zeroExtend: false, lexicographical: false}) {
     const lexicographical = options && options.lexicographical,

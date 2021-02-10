@@ -1,12 +1,12 @@
-const  openAboutWindow = require("about-window").default;
-
-const {app, BrowserWindow, Menu, session } = require('electron');
+const {app, BrowserWindow, Menu, session, ipcMain } = require('electron');
 const ProgressBar = require('electron-progressbar');
 const { downloadManager } = require('./download');
+const {getUpdateInfo } = require('./updater');
 const path = require('path');
 const urlM = require('url');
 const {autoUpdater} = require("electron-updater");
-const {getUpdateInfo } = require('./updater');
+const { dialog } = require('electron')
+const  openAboutWindow = require("about-window").default;
 exports.createWindow =  function(i18n, dev = true) {
     // Setup permission handler
     session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
@@ -21,7 +21,9 @@ exports.createWindow =  function(i18n, dev = true) {
     //     })
     // });
     // Create the browser window.
-    let win = new BrowserWindow({
+
+
+    let  win = new BrowserWindow({
         // width: 600,
         // height: 600,
         title: "Private Discuss",
@@ -37,7 +39,7 @@ exports.createWindow =  function(i18n, dev = true) {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
             nativeWindowOpen: true,
-             enableRemoteModule: true
+            enableRemoteModule: true,
             // contextIsolation: true,
         },
         center: true,
@@ -75,7 +77,7 @@ exports.createWindow =  function(i18n, dev = true) {
                 webContents: "", // use existing webContents if provided
                 show: false
             })
-    
+
             let new_win = new BrowserWindow(options)
 
             new_win.once('ready-to-show', () => {
@@ -85,11 +87,11 @@ exports.createWindow =  function(i18n, dev = true) {
                 }
             })
             // if (!options.webContents) {
-                new_win.loadURL(finalPath) // existing webContents will be navigated automatically
+            new_win.loadURL(finalPath) // existing webContents will be navigated automatically
             // }
             event.newGuest = new_win
         }
-      })
+    })
 
     // win.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
     //     alert(options);
@@ -110,7 +112,7 @@ exports.createWindow =  function(i18n, dev = true) {
             nodeIntegration: true
         }
     });
-    splash.loadURL(`file://${__dirname}/assets/splash_private.html?connection=1`);
+    splash.loadURL(`file://${__dirname}/assets/splash.html?connection=1`);
 
     // win.loadURL(`http://openproject.piman2-0.fr`);
 
@@ -123,7 +125,7 @@ exports.createWindow =  function(i18n, dev = true) {
     });
 
     win.on('close', function (event) {
-           app.quit();
+        app.quit();
     });
 
     const templateFull = getMenuAfterAuth(win, i18n);
@@ -253,8 +255,6 @@ function downloadManager2(win) {
 
 
 function getMenuBeforeAuth(win, i18n) {
-    console.log('-------i18n ' , i18n)
-    console.log('-------i18n ' , i18n.t)
     return [{
         label: i18n.t('application'),
         submenu: [
@@ -273,7 +273,7 @@ function getMenuBeforeAuth(win, i18n) {
                 }},
             {
                 label: i18n.t('update'),  click: function () {
-                    getUpdateInfo(true);
+                    getUpdateInfo(true)
                     autoUpdater.checkForUpdatesAndNotify()
                 }
             },
@@ -315,21 +315,21 @@ function getMenuAfterAuth (win, i18n) {
         label: i18n.t('application'),
         submenu: [
             {label: i18n.t('about'), click: function ()
-    {
-        openAboutWindow({
-            icon_path: `C:\\Users\\Piman\\Documents\\Discuss\\private-discuss-auto-update\\assets\\private_icon.png`,
-            product_name: 'Private Discuss',
-            copyright: 'Copyright © 2021 PRIVATE DISCUSS',
-            css_path: `../../assets/custom-about.css`,
-            win_options: {
-                width: 290,
-                height: 200
-            }
-        });
-    }},
+                {
+                    openAboutWindow({
+                        icon_path: `C:\\Users\\Piman\\Documents\\Discuss\\private-discuss-auto-update\\assets\\private_icon.png`,
+                        product_name: 'Private Discuss',
+                        copyright: 'Copyright © 2021 PRIVATE DISCUSS',
+                        css_path: `../../assets/custom-about.css`,
+                        win_options: {
+                            width: 290,
+                            height: 200
+                        }
+                    });
+                }},
             {
                 label: i18n.t('update'),  click: function () {
-                    getUpdateInfo(true);
+                    getUpdateInfo(true)
                     autoUpdater.checkForUpdatesAndNotify()
                 }
             },
@@ -390,4 +390,3 @@ function getMenuAfterAuth (win, i18n) {
 
 exports.getMenuBeforeAuth = getMenuBeforeAuth;
 exports.getMenuAfterAuth = getMenuAfterAuth;
-
