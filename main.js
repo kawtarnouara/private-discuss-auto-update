@@ -131,9 +131,7 @@ ipcMain.on('online-status-changed', (event, status) => {
     const isAllowedCamera = await systemPreferences.askForMediaAccess('camera');
     console.log("MICROHPHONE ALLOWED ------" + isAllowedMicrophone);
     console.log("Camera ALLOWED ------" + isAllowedCamera);
-        if (process.platform === 'darwin') {
-             initUpdater(win);
-        }
+    initUpdater(win);
 });
 } else if (status === 'offline' && currentStatus !== 'offline') {
     currentStatus = 'offline';

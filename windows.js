@@ -6,14 +6,14 @@ const { downloadManager } = require('./download');
 const path = require('path');
 const urlM = require('url');
 const {autoUpdater} = require("electron-updater");
-let { showNoUpdatesDialog } = require('./updater');
+const {getUpdateInfo } = require('./updater');
 exports.createWindow =  function(i18n, dev = true) {
     // Setup permission handler
     session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
         return true;
     });
     // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-    //     callbacfk({
+    //     callback({
     //         responseHeaders: {
     //             ...details.responseHeaders,
     //             'Content-Security-Policy': ['default-src \'none\'']
@@ -36,8 +36,8 @@ exports.createWindow =  function(i18n, dev = true) {
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
-            nativeWindowOpen: true
-            // enableRemoteModule: false,
+            nativeWindowOpen: true,
+             enableRemoteModule: true
             // contextIsolation: true,
         },
         center: true,
@@ -273,7 +273,7 @@ function getMenuBeforeAuth(win, i18n) {
                 }},
             {
                 label: i18n.t('update'),  click: function () {
-                    showNoUpdatesDialog = true;
+                    getUpdateInfo(true);
                     autoUpdater.checkForUpdatesAndNotify()
                 }
             },
@@ -329,7 +329,7 @@ function getMenuAfterAuth (win, i18n) {
     }},
             {
                 label: i18n.t('update'),  click: function () {
-                    showNoUpdatesDialog = true;
+                    getUpdateInfo(true);
                     autoUpdater.checkForUpdatesAndNotify()
                 }
             },

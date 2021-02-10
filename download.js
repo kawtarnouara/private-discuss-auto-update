@@ -1,7 +1,14 @@
-const { session, BrowserWindow, app } = require('electron');
+const { session, BrowserWindow, app, ipcMain } = require('electron');
 const ProgressBar = require('electron-progressbar');
 
+let dialogFile;
 exports.downloadManager = function () {
+    ipcMain.on('close_dialog', () => {
+        if (dialogFile){
+            dialogFile.destroy();
+            dialogFile = null;
+        }
+    });
     session.defaultSession.on('will-download', function(event, downloadItem, webContents){
         "use strict";
         // console.log(app.getPath('downloads'), downloadItem.getURL(), downloadItem.getFilename(), downloadItem.getMimeType());
@@ -92,7 +99,7 @@ exports.downloadManager = function () {
                 if (progressBar) {
                     let path = downloadItem.getSavePath();
                     progressBar.close();
-                    let dialogFile = new BrowserWindow({
+                     dialogFile = new BrowserWindow({
                         title: "Téléchargement - Private Discuss",
                         width: 500,
                         height: 170,

@@ -177,16 +177,14 @@
             });
         return result;
     }
-    const { shell, remote } = require('electron');
+    const { shell, ipcRenderer } = require('electron');
     function openFile() {
-        shell.openItem(findGetParameter('file'));
-        let window = remote.getCurrentWindow();
-        window.close();
+        shell.openPath(findGetParameter('file'));
+        ipcRenderer.send('close_dialog');
     }
     function openFileLocation() {
         shell.showItemInFolder(findGetParameter('file'));
-        let window = remote.getCurrentWindow();
-        window.close();
+        ipcRenderer.send('close_dialog');
     }
 </script>
 </body>

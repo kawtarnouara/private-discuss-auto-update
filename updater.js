@@ -5,11 +5,11 @@ const { BrowserWindow } = require('electron')
 const { dialog } = require('electron')
 var dialogUpdate;
 var dialogCheckUpdate;
-var showNoUpdatesDialog = exports.showNoUpdatesDialog = false;
+var showNoUpdatesDialog = false;
 let backendData;
 let autoUpdateVersion;
 exports.initUpdater = (mainWindow) => {
-    getUpdateInfo();
+    getUpdateInfo(false);
     autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "Yra7hy4NWZPvgsNFWWo_" };
     autoUpdater.autoDownload = false;
     autoUpdater.checkForUpdatesAndNotify();
@@ -34,6 +34,12 @@ exports.initUpdater = (mainWindow) => {
                 old_version: oldVersion,
                 details: description ? description : '',
                 force_update: force_update,
+            });
+        } else  if (showNoUpdatesDialog){
+            dialog.showMessageBox({
+                title: 'Piman Discuss',
+                message: 'Piman Discuss est à jour.',
+                detail: 'Version ' + app.getVersion()
             });
         }
     });
@@ -91,7 +97,10 @@ exports.initUpdater = (mainWindow) => {
     ipcMain.on('restart_app', () => {
         dialogUpdate.destroy();
         dialogUpdate = null;
-        autoUpdater.quitAndInstall();
+        setImmediate(() => {
+            app.removeAllListeners('window-all-closed');
+            autoUpdater.quitAndInstall();
+        });
     });
 
     ipcMain.on('cancel_update', () => {
@@ -161,7 +170,8 @@ function updateDialog(dialogTitle, options) {
     return dialogFile;
 }
 
-function getUpdateInfo ()  {
+exports.getUpdateInfo = getUpdateInfo = (showNoUpdates)  => {
+    showNoUpdatesDialog = showNoUpdates;
     const { net } = require('electron')
     var body = JSON.stringify({ platform: 'desktop', os: 'macos'});
     const request = net.request({
@@ -174,6 +184,7 @@ function getUpdateInfo ()  {
         console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
 
         response.on('data', (chunk) => {
+            console.log(showNoUpdatesDialog, showNoUpdatesDialog)
             console.log(`BODY: ${JSON.parse(chunk.toString()).result.data}`)
             backendData = JSON.parse(chunk.toString()).result.data;
         });
