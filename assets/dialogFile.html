@@ -180,11 +180,15 @@
     const { shell, ipcRenderer } = require('electron');
     function openFile() {
         shell.openPath(findGetParameter('file'));
-        ipcRenderer.send('close_dialog');
+        setTimeout(() => {
+            ipcRenderer.send('close_dialog');
+        }, 500)
     }
     function openFileLocation() {
         shell.showItemInFolder(findGetParameter('file'));
-        ipcRenderer.send('close_dialog');
+        setTimeout(() => {
+            ipcRenderer.send('close_dialog');
+        }, 500)
     }
 </script>
 </body>
