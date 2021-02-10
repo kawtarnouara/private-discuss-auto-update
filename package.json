@@ -41,6 +41,7 @@
       "entitlementsInherit": "./build/entitlements.mac.inherit.plist"
     },
     "win": {
+      "verifyUpdateCodeSignature": "false",
       "icon": "./build/icon.ico",
       "target": "nsis",
       "certificateSubjectName": "SECURED BY PIMAN SECURITY SAS",
