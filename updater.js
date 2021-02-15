@@ -8,6 +8,8 @@ var dialogUpdate;
 var dialogCheckUpdate;
 let backendData;
 let autoUpdateVersion;
+const nativeImage = require('electron').nativeImage;
+const dialogImage = nativeImage.createFromPath('./assets/private_icon.png');
 exports.initUpdater = (mainWindow) => {
     getUpdateInfo(false);
 //s    autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "Yra7hy4NWZPvgsNFWWo_" };
@@ -37,6 +39,7 @@ exports.initUpdater = (mainWindow) => {
             });
         } else  if (showNoUpdatesDialog){
             dialog.showMessageBox({
+                icon: dialogImage,
                 title: 'Private Discuss',
                 message: 'Private Discuss est à jour.',
                 detail: 'Version ' + app.getVersion()
@@ -47,6 +50,7 @@ exports.initUpdater = (mainWindow) => {
 
         if (showNoUpdatesDialog){
             dialog.showMessageBox({
+                icon: dialogImage,
                 title: 'Private Discuss',
                 message: 'Private Discuss est à jour.',
                 detail: 'Version ' + app.getVersion()
