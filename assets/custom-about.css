@@ -1,9 +1,10 @@
 .logo{
-    width: 90px !important;
+    text-align: center;
+    height: 45px !important;
 
 }
 .logo img{
-height: 90px !important;
+height: 40px !important;
   }
 
 .title{

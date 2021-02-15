@@ -261,7 +261,7 @@ function getMenuBeforeAuth(win, i18n) {
             {label: i18n.t('about'), click: function ()
                 {
                     openAboutWindow({
-                        icon_path: `C:\\Users\\Piman\\Documents\\Discuss\\private-discuss-auto-update\\assets\\private_icon.png`,
+                        icon_path: `https://api-v2.private-discuss.com/images/Logo_privatediscuss.svg`,
                         product_name: 'Private Discuss',
                         copyright: 'Copyright © 2021 PRIVATE DISCUSS',
                         css_path: `../../assets/custom-about.css`,
@@ -317,7 +317,7 @@ function getMenuAfterAuth (win, i18n) {
             {label: i18n.t('about'), click: function ()
                 {
                     openAboutWindow({
-                        icon_path: `C:\\Users\\Piman\\Documents\\Discuss\\private-discuss-auto-update\\assets\\private_icon.png`,
+                        icon_path: `https://api-v2.private-discuss.com/images/Logo_privatediscuss.svg`,
                         product_name: 'Private Discuss',
                         copyright: 'Copyright © 2021 PRIVATE DISCUSS',
                         css_path: `../../assets/custom-about.css`,
