@@ -13,5 +13,8 @@
   "paste": "Paste",
   "selectAll": "Select all",
   "window": "Window",
-  "reload": "Reload"
+  "reload": "Reload",
+  "no_updates": "is up to date",
+  "download": "Please download the last release from Settings",
+  "current_version": "Current version"
 }

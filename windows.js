@@ -5,7 +5,10 @@ const path = require('path');
 const urlM = require('url');
 const {autoUpdater} = require("electron-updater");
 let { showNoUpdatesDialog } = require('./updater');
+let translate;
+const { dialog } = require('electron')
 exports.createWindow =  function(i18n, dev = true) {
+    translate = i18n;
     // Setup permission handler
     session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
         return true;
@@ -256,11 +259,9 @@ function getMenuBeforeAuth(win, i18n) {
     return [{
         label: i18n.t('application'),
         submenu: [
-            {label: i18n.t('about'), selector: "orderFrontStandardAboutPanel:"},
             {
                 label: i18n.t('update'),  click: function () {
-                    showNoUpdatesDialog = true;
-                    autoUpdater.checkForUpdatesAndNotify()
+                    getUpdateInfo()
                 }
             },
             {type: "separator"},
@@ -300,11 +301,9 @@ function getMenuAfterAuth (win, i18n) {
     return [{
         label: i18n.t('application'),
         submenu: [
-            {label: i18n.t('about'), selector: "orderFrontStandardAboutPanel:"},
             {
                 label: i18n.t('update'),  click: function () {
-                    showNoUpdatesDialog = true;
-                    autoUpdater.checkForUpdatesAndNotify()
+                    getUpdateInfo();
                 }
             },
             // { label: i18n.t('profil'), selector: "CmdOrCtrl+,",  click: function() { shell.openExternal('https://discuss.piman2-0.fr/account/profil'); }},
@@ -361,6 +360,53 @@ function getMenuAfterAuth (win, i18n) {
     }
     ];
 }
+
+function getUpdateInfo()  {
+    const { net } = require('electron')
+    var body = JSON.stringify({ platform: 'desktop', os: 'linux'});
+    const request = net.request({
+        method: 'POST',
+        url: 'https://api-v2.private-discuss.com/v1.0/release/get',
+        protocol: 'https:',
+    });
+    request.on('response', (response) => {
+        console.log(`STATUS: ${response.statusCode} ${response.toString()}`);
+        console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
+
+        response.on('data', (chunk) => {
+            console.log(`BODY: ${JSON.stringify(JSON.parse(chunk.toString()))}`)
+            backendData = JSON.parse(chunk.toString()).result.data;
+            handleData();
+        });
+        response.on('error', (error) => {
+            console.log('error :' + JSON.stringify(error))
+        });
+    });
+    request.on('error', (error) => {
+        console.log('error :' + JSON.stringify(error))
+    });
+    request.setHeader('Content-Type', 'application/json');
+    request.write(body, 'utf-8');
+    request.end();
+
+}
+
+function handleData(){
+    if (backendData && backendData.version.toString() === app.getVersion().toString()){
+        dialog.showMessageBox({
+            title: 'Piman Discuss',
+            message: 'Piman Discuss ' + translate.t('no_updates'),
+            detail: 'Version ' + app.getVersion()
+        });
+    } else {
+        dialog.showMessageBox({
+            title: 'Piman Discuss',
+            message: translate.t('download'),
+            detail: translate.t('current_version') + ' ' + app.getVersion()
+        });
+    }
+}
+
 
 exports.getMenuBeforeAuth = getMenuBeforeAuth;
 exports.getMenuAfterAuth = getMenuAfterAuth;

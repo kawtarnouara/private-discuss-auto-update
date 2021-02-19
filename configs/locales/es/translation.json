@@ -13,5 +13,8 @@
   "paste": "Pegar",
   "selectAll": "Seleccionar todo",
   "window": "Ventana",
-  "reload": "Recargar"
+  "reload": "Recargar",
+  "no_updates": "está actualizado",
+  "download": "Descargue la última versión desde la configuración",
+  "current_version": "versión actual"
 }

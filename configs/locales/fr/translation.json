@@ -13,5 +13,8 @@
   "paste": "Coller",
   "selectAll": "Tout sélectionner",
   "window": "Fenêtre",
-  "reload": "Recharger"
+  "reload": "Recharger",
+ "no_updates": "est à jour",
+ "download": "Veuillez télécharger la dernière version en vous rendant sur Paramètres",
+ "current_version": "Version actuelle"
 }
