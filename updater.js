@@ -108,6 +108,10 @@ exports.initUpdater = (mainWindow) => {
         dialogCheckUpdate = null;
     });
 
+    ipcMain.on('update-app', () => {
+        getUpdateInfo(true)
+        autoUpdater.checkForUpdatesAndNotify()
+    });
 
     ipcMain.on('update_app', () => {
         autoUpdater.downloadUpdate();
