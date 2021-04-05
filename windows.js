@@ -7,7 +7,7 @@ const {autoUpdater} = require("electron-updater");
 const {getUpdateInfo } = require('./updater');
 exports.createWindow =  function(i18n, dev = true) {
     // Setup permission handler
-    session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
+    session.defaultSession.setPermissionRequestHandler((webContents, permission) => {
         return true;
     });
     // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
