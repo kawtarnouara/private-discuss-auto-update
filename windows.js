@@ -9,7 +9,7 @@ const { dialog } = require('electron')
 const  openAboutWindow = require("about-window").default;
 exports.createWindow =  function(i18n, dev = true) {
     // Setup permission handler
-    session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
+    session.defaultSession.setPermissionRequestHandler((webContents, permission) => {
         return true;
     });
     // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
