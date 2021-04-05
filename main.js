@@ -125,10 +125,10 @@ ipcMain.on('online-status-changed', (event, status) => {
         splash.destroy();
     win.show();
     currentStatus = null;
-    const isAllowedMicrophone = await systemPreferences.askForMediaAccess('microphone');
+/*    const isAllowedMicrophone = await systemPreferences.askForMediaAccess('microphone');
     const isAllowedCamera = await systemPreferences.askForMediaAccess('camera');
     console.log("MICROHPHONE ALLOWED ------" + isAllowedMicrophone);
-    console.log("Camera ALLOWED ------" + isAllowedCamera);
+    console.log("Camera ALLOWED ------" + isAllowedCamera);*/
    // initUpdater(win);
 });
 } else if (status === 'offline' && currentStatus !== 'offline') {
