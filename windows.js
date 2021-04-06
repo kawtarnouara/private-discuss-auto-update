@@ -7,7 +7,7 @@ const {autoUpdater} = require("electron-updater");
 const {getUpdateInfo } = require('./updater');
 exports.createWindow =  function(i18n, dev = true) {
     // Setup permission handler
-    session.defaultSession.setPermissionRequestHandler((webContents, permission) => {
+    session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
         return true;
     });
     // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
@@ -32,6 +32,7 @@ exports.createWindow =  function(i18n, dev = true) {
         icon: `file://${__dirname}/build/icon.icns`,
         nodeIntegration: 'iframe',
         webPreferences: {
+            contextIsolation: false,
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
             nativeWindowOpen: true,
@@ -105,6 +106,7 @@ exports.createWindow =  function(i18n, dev = true) {
         frame: false,
         alwaysOnTop: true,
         webPreferences: {
+            contextIsolation: false,
             nodeIntegration: true
         }
     });
@@ -231,6 +233,7 @@ function downloadManager2(win) {
                         nodeIntegration: 'iframe',
                         resizable: false,
                         webPreferences: {
+                            contextIsolation: false,
                             nodeIntegration: true
                         }
                     });

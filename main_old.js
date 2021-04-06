@@ -48,6 +48,7 @@ async function createWindow() {
         icon: `file://${__dirname}/icons/piman_k9o_icon.icns`,
         nodeIntegration: 'iframe',
         webPreferences: {
+            contextIsolation: false,
             nodeIntegration: true,
             nodeIntegrationInWorker: true
             // enableRemoteModule: false,
@@ -73,6 +74,7 @@ async function createWindow() {
         frame: false,
         alwaysOnTop: true,
         webPreferences: {
+            contextIsolation: false,
             nodeIntegration: true
         }
     });
