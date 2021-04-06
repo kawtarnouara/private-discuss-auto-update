@@ -32,6 +32,7 @@ exports.createWindow =  function(i18n, dev = true) {
         icon: path.join(__dirname, '/build/icons/icon-512x512.png'),
         nodeIntegration: 'iframe',
         webPreferences: {
+            contextIsolation: false,
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
             nativeWindowOpen: true,
@@ -105,6 +106,7 @@ exports.createWindow =  function(i18n, dev = true) {
         frame: false,
         alwaysOnTop: true,
         webPreferences: {
+            contextIsolation: false,
             nodeIntegration: true
         }
     });
@@ -231,6 +233,7 @@ function downloadManager2(win) {
                         nodeIntegration: 'iframe',
                         resizable: false,
                         webPreferences: {
+                            contextIsolation: false,
                             nodeIntegration: true
                         }
                     });

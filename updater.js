@@ -149,6 +149,7 @@ function updateDialog(dialogTitle, options) {
         fullscreenable: false,
         alwaysOnTop: true,
         webPreferences: {
+            contextIsolation: false,
             nodeIntegration: true
         },
         center: true
@@ -206,6 +207,7 @@ function checkupdateDialog  (dialogTitle, options)   {
         fullscreenable: false,
         alwaysOnTop: true,
         webPreferences: {
+            contextIsolation: false,
             nodeIntegration: true
         },
         center: true
