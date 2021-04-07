@@ -15,6 +15,7 @@ async function createWindow() {
         fullscreenable: false,
         alwaysOnTop: true,
         webPreferences: {
+            contextIsolation: false,
             nodeIntegration: true
         },
         center: true

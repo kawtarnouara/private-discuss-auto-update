@@ -205,6 +205,7 @@ function downloadManager2(win) {
                                 width: 500,
                                 height: 170,
                                 webPreferences: {
+                                    contextIsolation: false,
                                     nodeIntegration: true
                                 }
                             }
