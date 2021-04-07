@@ -13,6 +13,7 @@ const dialogImage = nativeImage.createFromPath('./assets/private_icon.png');
 exports.initUpdater = (mainWindow) => {
     getUpdateInfo(false);
 //s    autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "Yra7hy4NWZPvgsNFWWo_" };
+    autoUpdater.autoInstallOnAppQuit = false;
     autoUpdater.autoDownload = false;
     autoUpdater.checkForUpdatesAndNotify();
     let progressBar;
@@ -143,6 +144,7 @@ exports.initUpdater = (mainWindow) => {
                     width: 500,
                     height: 170,
                     webPreferences: {
+                        contextIsolation: false,
                         nodeIntegration: true
                     }
                 }
