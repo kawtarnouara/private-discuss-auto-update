@@ -79,6 +79,7 @@ exports.downloadManager = function () {
                                 width: 500,
                                 height: 170,
                                 webPreferences: {
+                                    contextIsolation: false,
                                     nodeIntegration: true
                                 }
                             }
