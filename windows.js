@@ -48,49 +48,32 @@ exports.createWindow =  function(i18n, dev = true) {
     });
 
     win.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
-        if (/\/room\//.test(url)) {
+        const openRoom = /\/room\//.test(url);
+        const openConnectivity = url.includes('connectivity-test');
+        if (openRoom || openConnectivity) {
             // open window as modal
             event.preventDefault()
 
             console.log(url)
 
-            let subURL = url.substr(url.indexOf("/room/"))
+            let subURL = openRoom ? url.substr(url.indexOf("/room/")) : 'connectivity-test'
 
             console.log(subURL)
 
-            let finalPath = urlM.format({
-                pathname: path.join(__dirname, '/dist/index.html'),
-                protocol: 'file:',
-                slashes: true,
-                hash: subURL
-            })
+            const new_win = openNewWindow(subURL, event, options, dev);
+            new_win.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
+                if (url.includes('connectivity-test')){
+                    event.preventDefault()
 
-            console.log(finalPath)
+                    console.log(url)
 
-            // win.webContents.executeJavaScript('localStorage.getItem("jwt_token")').then(function(value){
+                    let subURL = 'connectivity-test';
 
-            Object.assign(options, {
-                title: "Private Discuss Conf Call",
-                modal: false,
-                // parent: win,
-                width: 1000,
-                height: 600,
-                webContents: "", // use existing webContents if provided
-                show: false
-            })
+                    console.log(subURL)
 
-            let new_win = new BrowserWindow(options)
-
-            new_win.once('ready-to-show', () => {
-                new_win.show()
-                if (dev) {
-                    new_win.webContents.openDevTools();
+                    const connectivity_win = openNewWindow(subURL, event, options, dev);
                 }
             })
-            // if (!options.webContents) {
-            new_win.loadURL(finalPath) // existing webContents will be navigated automatically
-            // }
-            event.newGuest = new_win
         }
     })
 
@@ -140,6 +123,42 @@ exports.createWindow =  function(i18n, dev = true) {
     return {win: win, splash: splash}
 };
 
+function openNewWindow(subURL, event, options, dev){
+    let finalPath = urlM.format({
+        pathname: path.join(__dirname, '/dist/index.html'),
+        protocol: 'file:',
+        slashes: true,
+        hash: subURL
+    })
+
+    console.log(finalPath)
+
+    // win.webContents.executeJavaScript('localStorage.getItem("jwt_token")').then(function(value){
+
+    Object.assign(options, {
+        title: "Private Discuss",
+        modal: false,
+        // parent: win,
+        width: 1000,
+        height: 600,
+        webContents: "", // use existing webContents if provided
+        show: false
+    })
+
+    let new_win = new BrowserWindow(options)
+
+    new_win.once('ready-to-show', () => {
+        new_win.show()
+        if (dev) {
+            new_win.webContents.openDevTools();
+        }
+    })
+    // if (!options.webContents) {
+    new_win.loadURL(finalPath) // existing webContents will be navigated automatically
+    // }
+    event.newGuest = new_win
+    return new_win;
+}
 
 function downloadManager2(win) {
     win.webContents.session.on('will-download', function(event, downloadItem, webContents){
