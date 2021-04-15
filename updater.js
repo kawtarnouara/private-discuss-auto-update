@@ -38,8 +38,8 @@ exports.initUpdater = (mainWindow) => {
             });
         } else  if (showNoUpdatesDialog){
             dialog.showMessageBox({
-                title: 'Piman Discuss',
-                message: 'Piman Discuss est à jour.',
+                title: 'Private Discuss',
+                message: 'Private Discuss est à jour.',
                 detail: 'Version ' + app.getVersion()
             });
         }
@@ -47,8 +47,8 @@ exports.initUpdater = (mainWindow) => {
     autoUpdater.on('update-not-available', () => {
         if (showNoUpdatesDialog){
             dialog.showMessageBox({
-                title: 'Piman Discuss',
-                message: 'Piman Discuss est à jour.',
+                title: 'Private Discuss',
+                message: 'Private Discuss est à jour.',
                 detail: 'Version ' + app.getVersion()
             });
         }
@@ -121,7 +121,7 @@ exports.initUpdater = (mainWindow) => {
         if (!progressBar) {
             progressBar = new ProgressBar({
                 indeterminate: false,
-                title: 'Mise à jour - Piman Discuss',
+                title: 'Mise à jour - Private Discuss',
                 text: 'En téléchargement ...',
                 detail: 'Préparation de la nouvelle version ...',
                 closeOnComplete: false,
