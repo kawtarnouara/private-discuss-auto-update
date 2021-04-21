@@ -123,7 +123,7 @@ ipcMain.on('online-status-changed', (event, status) => {
     console.info(`file://${__dirname}/dist/index.html`)
     win.loadURL(`file://${__dirname}/dist/index.html`);
     // win.loadURL(`https://piman.private-discuss.com`);
-    win.once('ready-to-show', async () => {
+    win.once('ready-to-show',  () => {
         splash.destroy();
     win.show();
     currentStatus = null;
