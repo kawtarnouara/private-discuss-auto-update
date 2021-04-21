@@ -274,8 +274,6 @@ function downloadManager2(win) {
 
 
 function getMenuBeforeAuth(win, i18n) {
-    console.log('-------i18n ' , i18n)
-    console.log('-------i18n ' , i18n.t)
     return [{
         label: i18n.t('application'),
         submenu: [
