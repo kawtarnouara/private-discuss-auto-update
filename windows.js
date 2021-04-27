@@ -276,6 +276,23 @@ function downloadManager2(win) {
     });
 }
 
+function openAbout(){
+    openAboutWindow({
+        icon_path: `https://api-v2.private-discuss.com/images/Logo_privatediscuss.svg`,
+        product_name: 'Private Discuss',
+        copyright: 'Copyright © 2021 PRIVATE DISCUSS',
+        css_path: `../../assets/custom-about.css`,
+        win_options: {
+            width: 290,
+            height: 200,
+            webPreferences: {
+                enableRemoteModule: true,
+                nodeIntegration: true,
+                contextIsolation: false,
+            }
+        }
+    });
+}
 
 function getMenuBeforeAuth(win, i18n) {
     return [{
@@ -283,16 +300,7 @@ function getMenuBeforeAuth(win, i18n) {
         submenu: [
             {label: i18n.t('about'), click: function ()
                 {
-                    openAboutWindow({
-                        icon_path: `https://api-v2.private-discuss.com/images/Logo_privatediscuss.svg`,
-                        product_name: 'Private Discuss',
-                        copyright: 'Copyright © 2021 PRIVATE DISCUSS',
-                        css_path: `../../assets/custom-about.css`,
-                        win_options: {
-                            width: 290,
-                            height: 200
-                        }
-                    });
+                    openAbout();
                 }},
             {
                 label: i18n.t('update'),  click: function () {
@@ -339,16 +347,7 @@ function getMenuAfterAuth (win, i18n) {
         submenu: [
             {label: i18n.t('about'), click: function ()
                 {
-                    openAboutWindow({
-                        icon_path: `https://api-v2.private-discuss.com/images/Logo_privatediscuss.svg`,
-                        product_name: 'Private Discuss',
-                        copyright: 'Copyright © 2021 PRIVATE DISCUSS',
-                        css_path: `../../assets/custom-about.css`,
-                        win_options: {
-                            width: 290,
-                            height: 200
-                        }
-                    });
+                    openAbout()
                 }},
             {
                 label: i18n.t('update'),  click: function () {
