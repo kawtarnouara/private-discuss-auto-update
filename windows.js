@@ -49,6 +49,7 @@ exports.createWindow =  function(i18n, dev = true) {
 
     win.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
         const openRoom = /\/room\//.test(url);
+        const isPublicRoom = /\/public\//.test(url);
         const openConnectivity = url.includes('connectivity-test');
         if (openRoom || openConnectivity) {
             // open window as modal
@@ -56,7 +57,7 @@ exports.createWindow =  function(i18n, dev = true) {
 
             console.log(url)
 
-            let subURL = openRoom ? url.substr(url.indexOf("/room/")) : 'connectivity-test'
+            let subURL = openRoom && isPublicRoom? url.substr(url.indexOf("/public/")) : openRoom ? url.substr(url.indexOf("/room/")) : 'connectivity-test'
 
             console.log(subURL)
 
