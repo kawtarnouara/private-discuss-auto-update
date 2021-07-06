@@ -90,7 +90,7 @@
     }
     const force_update = findGetParameter('force_update');
 
-    if (force_update){
+    if (force_update.toString() === '1'){
         const cancel = document.getElementById('cancel-btn');
         cancel.style.display = 'none';
     }
