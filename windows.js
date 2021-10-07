@@ -6,6 +6,7 @@ const urlM = require('url');
 const {autoUpdater} = require("electron-updater");
 let { showNoUpdatesDialog } = require('./updater');
 let translate;
+const remoteMain = require("@electron/remote/main");
 const { dialog } = require('electron')
 exports.createWindow =  function(i18n, dev = true) {
     translate = i18n;
@@ -61,6 +62,7 @@ exports.createWindow =  function(i18n, dev = true) {
             console.log(subURL)
 
             const new_win = openNewWindow(subURL, event, options, dev);
+            remoteMain.enable(new_win.webContents);
             new_win.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
                 if (url.includes('connectivity-test')){
                     event.preventDefault()
@@ -144,11 +146,18 @@ function openNewWindow(subURL, event, options, dev){
         minWidth: 500,
         minHeight: 500,
         webContents: "", // use existing webContents if provided
-        show: false
+        show: false,
+        webPreferences: {
+            contextIsolation: false,
+            nodeIntegration: true,
+            nodeIntegrationInWorker: true,
+            nativeWindowOpen: true,
+            enableRemoteModule: true
+        }
     })
 
     let new_win = new BrowserWindow(options)
-
+    remoteMain.enable(new_win.webContents);
     new_win.once('ready-to-show', () => {
         new_win.show()
         if (dev) {
