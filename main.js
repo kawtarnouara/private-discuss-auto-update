@@ -3,7 +3,8 @@ const i18n = require('./configs/i18next.config');
 
 const { createWindow, getMenuAfterAuth, getMenuBeforeAuth } = require('./windows');
 const { initUpdater } = require('./updater');
-const Badge = require('electron-windows-badge');
+const remoteMain = require("@electron/remote/main");
+
 let dev = false;
 
 let win;
@@ -11,6 +12,7 @@ let splash;
 let result;
 let mainurl;
 let mainev;
+remoteMain.initialize();
 if (process.platform === 'win32'){
     app.setAsDefaultProtocolClient('private-discuss');
 
@@ -74,6 +76,7 @@ app.on('ready', async () => {
         mainurl = process.argv.slice(1)[0]
     }
     win = result.win;
+    remoteMain.enable(win.webContents);
     new Badge(win, {});
     win.webContents.on('did-finish-load', () => {
         if (mainurl) {
