@@ -3,6 +3,8 @@ const i18n = require('./configs/i18next.config');
 
 const { createWindow, getMenuAfterAuth, getMenuBeforeAuth } = require('./windows');
 const { initUpdater } = require('./updater');
+const Badge = require('electron-windows-badge');
+
 const remoteMain = require("@electron/remote/main");
 
 let dev = false;
