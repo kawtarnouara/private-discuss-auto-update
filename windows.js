@@ -1,4 +1,4 @@
-const {app, BrowserWindow, Menu, session } = require('electron');
+const {app, BrowserWindow, Menu, session, shell } = require('electron');
 const ProgressBar = require('electron-progressbar');
 const { downloadManager } = require('./download');
 const path = require('path');
