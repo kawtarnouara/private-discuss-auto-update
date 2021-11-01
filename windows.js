@@ -77,6 +77,9 @@ exports.createWindow =  function(i18n, dev = true) {
                     const connectivity_win = openNewWindow(subURL, event, options, dev);
                 }
             })
+        }else {
+            event.preventDefault();
+            shell.openExternal(url);
         }
     })
 
