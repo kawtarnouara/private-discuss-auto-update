@@ -1,4 +1,4 @@
-const {app, BrowserWindow, Menu, session } = require('electron');
+const {app, BrowserWindow, Menu, session, shell } = require('electron');
 const ProgressBar = require('electron-progressbar');
 const { downloadManager } = require('./download');
 const path = require('path');
@@ -73,6 +73,9 @@ exports.createWindow =  function(i18n, dev = true) {
                     const connectivity_win = openNewWindow(subURL, event, options, dev);
                 }
             })
+        } else {
+            event.preventDefault();
+            shell.openExternal(url);
         }
     })
 
