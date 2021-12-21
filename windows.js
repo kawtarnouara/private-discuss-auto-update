@@ -144,8 +144,8 @@ function openNewWindow(subURL, event, options, dev){
         title: "Private Discuss",
         modal: false,
         // parent: win,
-        width: 1400,
-        height: 900,
+        width: 1300,
+        height: 800,
         minWidth: 500,
         minHeight: 500,
         webContents: "", // use existing webContents if provided
@@ -410,9 +410,14 @@ function getUpdateInfo()  {
         console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
 
         response.on('data', (chunk) => {
-            console.log(`BODY: ${JSON.stringify(JSON.parse(chunk.toString()))}`)
-            backendData = JSON.parse(chunk.toString()).result.data;
-            handleData();
+            try{
+                console.log(`BODY: ${JSON.stringify(JSON.parse(chunk.toString()))}`)
+                backendData = JSON.parse(chunk.toString()).result.data;
+                handleData();
+            } catch(e){
+
+            }
+
         });
         response.on('error', (error) => {
             console.log('error :' + JSON.stringify(error))
