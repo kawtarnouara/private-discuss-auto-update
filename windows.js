@@ -145,8 +145,8 @@ function openNewWindow(subURL, event, options, dev){
         title: "Private Discuss",
         modal: false,
         // parent: win,
-        width: 1400,
-        height: 900,
+        width: 1300,
+        height: 800,
         minWidth: 500,
         minHeight: 500,
         webContents: "", // use existing webContents if provided

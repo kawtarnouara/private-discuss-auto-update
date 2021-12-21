@@ -224,8 +224,12 @@ exports.getUpdateInfo = getUpdateInfo = (showNoUpdates)  => {
         console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
 
         response.on('data', (chunk) => {
-            console.log(`BODY: ${JSON.stringify(JSON.parse(chunk.toString()))}`)
-            backendData = JSON.parse(chunk.toString()).result.data;
+            try{
+                console.log(`BODY: ${JSON.stringify(JSON.parse(chunk.toString()))}`)
+                backendData = JSON.parse(chunk.toString()).result.data;
+            } catch (e) {
+
+            }
         });
         response.on('error', (error) => {
             console.log('error :' + JSON.stringify(error))
