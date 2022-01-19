@@ -10,7 +10,7 @@ let backendData;
 let autoUpdateVersion;
 exports.initUpdater = (mainWindow) => {
     getUpdateInfo();
-    autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "Yra7hy4NWZPvgsNFWWo_" };
+//s    autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "Yra7hy4NWZPvgsNFWWo_" };
     autoUpdater.autoInstallOnAppQuit = false;
     autoUpdater.autoDownload = false;
     autoUpdater.checkForUpdatesAndNotify();
@@ -39,6 +39,7 @@ exports.initUpdater = (mainWindow) => {
         }
     });
     autoUpdater.on('update-not-available', () => {
+
         if (showNoUpdatesDialog){
             dialog.showMessageBox({
                 title: 'Piman Discuss',
@@ -47,6 +48,7 @@ exports.initUpdater = (mainWindow) => {
             });
         }
     });
+
     autoUpdater.on('error', (err) => {
         // sendStatusToWindow('Error in auto-updater. ' + err);
         // mainWindow.webContents.send('update_error');
@@ -55,7 +57,7 @@ exports.initUpdater = (mainWindow) => {
         }
         updateDialog('Mise à jour - Private Discuss', {
             title: 'Mise à jour échouée',
-            details: "Impossible de terminer la mises à jour de votre application !",
+            details: "Impossible de terminer la mises à jour de votre application ! " ,
             withButtons: 0,
             success : 0
         });
@@ -167,6 +169,30 @@ function updateDialog(dialogTitle, options) {
     return dialogFile;
 }
 
+function checkupdateDialog  (dialogTitle, options)   {
+    let dialogFile = new BrowserWindow({
+        title: dialogTitle,
+        width: 600,
+        height: 450,
+        frame: false,
+        backgroundColor: 'white',
+        nodeIntegration: 'iframe',
+        resizable: false,
+        closable: false,
+        fullscreenable: false,
+        alwaysOnTop: true,
+        webPreferences: {
+            contextIsolation: false,
+            nodeIntegration: true
+        },
+        center: true
+    });
+
+    let query = encodeQueryData(options);
+    dialogFile.loadURL(`file://${__dirname}/assets/checkUpdateDialog.html?${query}`);
+    return dialogFile;
+}
+
 function getUpdateInfo ()  {
     const { net } = require('electron')
     var body = JSON.stringify({ platform: 'desktop', os: 'macos'});
@@ -201,36 +227,13 @@ function getUpdateInfo ()  {
 
 }
 
-function checkupdateDialog  (dialogTitle, options)   {
-    let dialogFile = new BrowserWindow({
-        title: dialogTitle,
-        width: 600,
-        height: 450,
-        frame: false,
-        backgroundColor: 'white',
-        nodeIntegration: 'iframe',
-        resizable: false,
-        closable: false,
-        fullscreenable: false,
-        alwaysOnTop: true,
-        webPreferences: {
-            contextIsolation: false,
-            nodeIntegration: true
-        },
-        center: true
-    });
-
-    let query = encodeQueryData(options);
-    dialogFile.loadURL(`file://${__dirname}/assets/checkUpdateDialog.html?${query}`);
-    return dialogFile;
-}
-
 function encodeQueryData(data) {
     const ret = [];
     for (let d in data)
         ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
     return ret.join('&');
 }
+
 
 function versionCompare(v1, v2, options = {zeroExtend: false, lexicographical: false}) {
     const lexicographical = options && options.lexicographical,

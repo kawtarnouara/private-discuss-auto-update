@@ -1,18 +1,18 @@
-const {app, BrowserWindow, ipcMain, systemPreferences, protocol, Menu  } = require('electron');
-const i18n = require('./configs/i18next.config');
+const {app, BrowserWindow, ipcMain, systemPreferences, protocol, Menu, ipcRenderer } = require('electron');
 
 const { createWindow, getMenuAfterAuth, getMenuBeforeAuth } = require('./windows');
 const { initUpdater } = require('./updater');
+const i18n = require('./configs/i18next.config');
 const remoteMain = require("@electron/remote/main");
-
 let dev = false;
-
+app.getLocale()
 let win;
 let splash;
 let result;
 let mainurl;
 let mainev;
 remoteMain.initialize();
+// Create window on electron intialization
 if (process.platform === 'win32'){
     app.setAsDefaultProtocolClient('private-discuss');
 
@@ -25,19 +25,19 @@ if (process.platform === 'win32'){
 // The primary instance of the application will run this code, not the new  instance
     app.on('second-instance', (event, args) => {
         if (args.slice(1) && args.slice(1)[2]){
-            mainurl = args.slice(1)[2]
-            if(win){
-                win.webContents.send('open-window', mainurl);
-                mainurl = null;
-                if(win.isMinimized()){
-                    win.restore();
-                }
-                win.focus();
+        mainurl = args.slice(1)[2]
+        if(win){
+            win.webContents.send('open-window', mainurl);
+            mainurl = null;
+            if(win.isMinimized()){
+                win.restore();
             }
+            win.focus();
+        }
         }
     });
 }
-// Create window on electron intialization
+
 app.on('open-url', function (ev, url) {
     ev.preventDefault();
     mainev = ev; mainurl = url;
@@ -52,7 +52,7 @@ app.on('open-url', function (ev, url) {
         }
     }
 });
-// Create window on electron intialization
+
 app.on('ready', async () => {
     i18n.on('loaded', (loaded) => {
         const lang = app.getLocale().startsWith('en') ? 'en' : app.getLocale().startsWith('fr') ? 'fr' : app.getLocale().startsWith('es') ? 'es' : 'fr'
@@ -70,7 +70,7 @@ app.on('ready', async () => {
     });
     result = await createWindow(i18n, dev);
     // console.log('result ----------------' , result);
-    console.log('token ----------------' , process.env.GH_TOKEN);
+     console.log('token ----------------' , process.env.GH_TOKEN);
     splash = result.splash;
     if (process.platform === 'win32' &&  process.argv.slice(1) &&  process.argv.slice(1)[0]){
         mainurl = process.argv.slice(1)[0]
@@ -83,6 +83,7 @@ app.on('ready', async () => {
             mainurl = null;
         }
     });
+
 });
 
 
@@ -125,6 +126,7 @@ ipcMain.on('setBadge', (event, count) => {
     app.badgeCount = (count >= 0) ? count : 0
 });
 ipcMain.on('online-status-changed', (event, status) => {
+    console.log('on -----');
     // console.log(status);
     if (status === 'online' && currentStatus !== 'online') {
     currentStatus = 'online';
@@ -140,7 +142,7 @@ ipcMain.on('online-status-changed', (event, status) => {
     const isAllowedCamera = await systemPreferences.askForMediaAccess('camera');
     console.log("MICROHPHONE ALLOWED ------" + isAllowedMicrophone);
     console.log("Camera ALLOWED ------" + isAllowedCamera);*/
-    // initUpdater(win);
+   // initUpdater(win);
 });
 } else if (status === 'offline' && currentStatus !== 'offline') {
     currentStatus = 'offline';

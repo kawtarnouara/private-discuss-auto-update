@@ -1,17 +1,20 @@
 const {app, BrowserWindow, Menu, session, shell } = require('electron');
 const ProgressBar = require('electron-progressbar');
 const { downloadManager } = require('./download');
+let { showNoUpdatesDialog } = require('./updater');
 const path = require('path');
 const urlM = require('url');
 const {autoUpdater} = require("electron-updater");
-let { showNoUpdatesDialog } = require('./updater');
-let translate;
-const remoteMain = require("@electron/remote/main");
 const { dialog } = require('electron')
+const remoteMain = require("@electron/remote/main");
+let backendData;
+let translate;
+
+
 exports.createWindow =  function(i18n, dev = true) {
     translate = i18n;
     // Setup permission handler
-    session.defaultSession.setPermissionRequestHandler((webContents, permission) => {
+    session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
         return true;
     });
     // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
@@ -23,6 +26,8 @@ exports.createWindow =  function(i18n, dev = true) {
     //     })
     // });
     // Create the browser window.
+
+
     let win = new BrowserWindow({
         // width: 600,
         // height: 600,
@@ -297,7 +302,7 @@ function getMenuBeforeAuth(win, i18n) {
         submenu: [
             {
                 label: i18n.t('update'),  click: function () {
-                    getUpdateInfo()
+                    getUpdateInfo();
                 }
             },
             {type: "separator"},
@@ -337,6 +342,7 @@ function getMenuAfterAuth (win, i18n) {
     return [{
         label: i18n.t('application'),
         submenu: [
+       //     {label: i18n.t('about'), selector: "orderFrontStandardAboutPanel:"},
             {
                 label: i18n.t('update'),  click: function () {
                     getUpdateInfo();
@@ -436,13 +442,13 @@ function handleData(){
     const isFunctionning = versionCompare(app.getVersion(), backendData.version);
     if (backendData && ( backendData.version.toString() === app.getVersion().toString() || isFunctionning !== -1 )){
         dialog.showMessageBox({
-            title: 'Piman Discuss',
-            message: 'Piman Discuss ' + translate.t('no_updates'),
+            title: 'Private Discuss',
+            message: 'Private Discuss ' + translate.t('no_updates'),
             detail: 'Version ' + app.getVersion()
         });
     } else {
         dialog.showMessageBox({
-            title: 'Piman Discuss',
+            title: 'Private Discuss',
             message: translate.t('download'),
             detail: translate.t('current_version') + ' ' + app.getVersion()
         });
