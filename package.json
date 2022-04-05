@@ -1,7 +1,7 @@
 {
   "name": "private-discuss",
   "description": "Private Discuss, La solution de communication privee, dediee, sur mesure et chiffree",
-  "version": "5.7.3",
+  "version": "5.7.9",
   "main": "./main.js",
   "author": "PRIVATE DISCUSS <contact@piman-group.fr>",
   "scripts": {
@@ -55,7 +55,7 @@
       "buildResources": "build"
     },
     "productName": "Private Discuss",
-    "afterSign": "/Users/kawtar/apps/private-discuss-electron-update/electron/notarize.js",
+    "afterSign": "/Users/kawtarnouara/Documents/apps/private-discuss-electron-update/electron/notarize.js",
     "protocols": [
       {
         "name": "Private discuss",
@@ -70,7 +70,7 @@
     "hardenedRuntime": true,
     "gatekeeperAssess": false,
     "entitlements": "build/entitlements.mac.plist",
-    "afterSign": "/Users/kawtar/apps/private-discuss-electron-update/electron/notarize.js",
+    "afterSign": "/Users/kawtarnouara/Documents/apps/private-discuss-electron-update/electron/notarize.js",
     "entitlementsInherit": "build/entitlements.mac.inherit.plist"
 
   },
