@@ -181,25 +181,31 @@ exports.getUpdateInfo = getUpdateInfo = (showNoUpdates)  => {
     showNoUpdatesDialog = showNoUpdates;
     const { net } = require('electron')
     var body = JSON.stringify({ platform: 'desktop', os: 'macos'});
+    let finalResponse = '';
     const request = net.request({
         method: 'POST',
         url: 'https://api-v2.private-discuss.com/v1.0/release/get',
         protocol: 'https:',
     });
     request.on('response', (response) => {
-        console.log(`STATUS: ${response.statusCode} ${response.toString()}`);
+        console.log(`STATUS: ${response.statusCode} ${JSON.stringify(response)}`);
         console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
 
         response.on('data', (chunk) => {
             try{
-                console.log(showNoUpdatesDialog, showNoUpdatesDialog)
-                console.log(`BODY: ${JSON.parse(chunk.toString()).result.data}`)
-                backendData = JSON.parse(chunk.toString()).result.data;
-            } catch (e) {
+                if (chunk){
+                    finalResponse += chunk.toString()
+
+                }
+            } catch(e){
 
             }
-
         });
+        response.on('end', () => {
+            const parsed = JSON.parse(finalResponse);
+            backendData = parsed.result.data;
+            console.log(`BODY: ${backendData}`)
+        })
         response.on('error', (error) => {
             console.log('error :' + JSON.stringify(error))
         });
