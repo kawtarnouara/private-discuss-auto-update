@@ -2,8 +2,33 @@ const { session, BrowserWindow, app, ipcMain } = require('electron');
 const ProgressBar = require('electron-progressbar');
 
 let dialogFile;
-exports.downloadManager = function () {
+let isDownloading = false;
+var progressBar = null;
+exports.downloadManager = function (win, i18n) {
+    win.on('close', function (event) {
+        if (isDownloading){
+            const choice = require('electron').dialog.showMessageBoxSync(this,
+                {
+                    type: 'question',
+                    buttons: [i18n.t('quit'), i18n.t('cancel')],
+                    title: i18n.t('warning'),
+                    message: i18n.t('downloading')
+                });
+            if (choice === 1) {
+                event.preventDefault();
+            } else {
+                if (progressBar){
+                    progressBar.close();
+                    progressBar = null;
+                }
+                app.quit();
+            }
+        } else {
+            app.quit();
+        }
+    });
     ipcMain.on('close_dialog', () => {
+        isDownloading = false;
         if (dialogFile){
             dialogFile.destroy();
             dialogFile = null;
@@ -20,6 +45,7 @@ exports.downloadManager = function () {
         const downloadFolder = (process.platform === 'darwin' ? '/' : '')  + app.getPath('downloads').replace(/^\/+|\/+$/g, '') + separator;
         let downloadFileName = downloadItem.getFilename();
         let downloadFilePath;
+        isDownloading = true;
         try {
             let suffix = "";
             let splitArray = downloadFileName.split(".");
@@ -46,7 +72,6 @@ exports.downloadManager = function () {
         var totalByte = downloadItem.getTotalBytes();
         var totalMByte = parseFloat((totalByte / 1000000).toFixed(2));
         // console.log('File Size', totalMByte+' MB');
-        var progressBar = null;
         downloadItem.on('updated', function (event, state) {
             "use strict";
             // console.log("download item event triggred with state : "+ state, event.sender.getContentDisposition());
@@ -54,6 +79,7 @@ exports.downloadManager = function () {
             let receviedMBytes = parseFloat((receviedBytes / 1000000).toFixed(2));
             console.log("received bytes : "+ receviedBytes);
             if (state === 'interrupted') {
+                isDownloading = false;
                 // console.log('Download is interrupted');
                 setTimeout(function () {
                     // progressBar.close();
@@ -95,6 +121,7 @@ exports.downloadManager = function () {
         });
 
         downloadItem.once('done', function(event, state) {
+            isDownloading = false;
             console.log("INSIDE DONE with state : " + state);
             if (state === 'completed') {
                 if (progressBar) {
