@@ -74,6 +74,7 @@ exports.downloadManager = function (win, i18n) {
         // console.log('File Size', totalMByte+' MB');
         downloadItem.on('updated', function (event, state) {
             "use strict";
+            progressBar = null;
             // console.log("download item event triggred with state : "+ state, event.sender.getContentDisposition());
             let receviedBytes = downloadItem.getReceivedBytes();
             let receviedMBytes = parseFloat((receviedBytes / 1000000).toFixed(2));
