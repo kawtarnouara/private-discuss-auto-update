@@ -36,6 +36,7 @@ exports.downloadManager = function (win, i18n) {
     });
     session.defaultSession.on('will-download', function(event, downloadItem, webContents){
         "use strict";
+        progressBar = null;
         // console.log(app.getPath('downloads'), downloadItem.getURL(), downloadItem.getFilename(), downloadItem.getMimeType());
         // .replace : to trim all "/" characters from downloads path
         const separator = process.platform === 'darwin' ? '/' :'\\';
