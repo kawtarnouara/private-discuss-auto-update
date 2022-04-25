@@ -36,6 +36,7 @@ exports.downloadManager = function (win, i18n) {
     });
     session.defaultSession.on('will-download', function(event, downloadItem, webContents){
         "use strict";
+        progressBar = null;
         // console.log(app.getPath('downloads'), downloadItem.getURL(), downloadItem.getFilename(), downloadItem.getMimeType());
         // .replace : to trim all "/" characters from downloads path
         const separator = process.platform === 'darwin' ? '/' :'\\';
@@ -74,7 +75,6 @@ exports.downloadManager = function (win, i18n) {
         // console.log('File Size', totalMByte+' MB');
         downloadItem.on('updated', function (event, state) {
             "use strict";
-            progressBar = null;
             // console.log("download item event triggred with state : "+ state, event.sender.getContentDisposition());
             let receviedBytes = downloadItem.getReceivedBytes();
             let receviedMBytes = parseFloat((receviedBytes / 1000000).toFixed(2));
