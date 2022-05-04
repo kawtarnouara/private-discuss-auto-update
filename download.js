@@ -100,8 +100,8 @@ exports.downloadManager = function (win, i18n) {
                                 parent: null,
                                 modal: true,
                                 resizable: false,
-                                closable: false,
-                                minimizable: false,
+                                closable: true,
+                                minimizable: true,
                                 maximizable: false,
                                 width: 500,
                                 height: 170,
@@ -111,6 +111,15 @@ exports.downloadManager = function (win, i18n) {
                                 }
                             }
                         });
+                        progressBar.on('aborted', () => {
+                            if (progressBar){
+                                win.setProgressBar(-1);
+                                progressBar.setCompleted();
+                                progressBar.close();
+                                progressBar = null;
+                            }
+                            downloadItem.cancel();
+                        })
                     }
                     if (progressBar.value !== 100) {
                         progressBar.value = (receviedBytes / totalByte) * 100;
