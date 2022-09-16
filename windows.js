@@ -58,7 +58,7 @@ exports.createWindow =  function(i18n, dev = true) {
 
             console.log(subURL)
 
-            const new_win = openNewWindow(subURL, event, options, dev);
+            const new_win = openNewWindow(subURL, event, options, dev, true);
             remoteMain.enable(new_win.webContents);
             new_win.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
                 if (url.includes('connectivity-test')){
@@ -76,7 +76,7 @@ exports.createWindow =  function(i18n, dev = true) {
         } else if(url.startsWith('https://office.private-discuss.com')){
             event.preventDefault();
             Object.assign(options, {
-                title: "Piman Discuss",
+                title: "Private Discuss",
                 modal: false,
                 // parent: win,
                 width: 1300,
@@ -99,6 +99,11 @@ exports.createWindow =  function(i18n, dev = true) {
             new_win.loadURL(url) // existing webContents will be navigated automatically
             // }
             event.newGuest = new_win
+        } else if (url.includes('/pdf/')){
+            event.preventDefault();
+            let subUrl = url.substr(url.indexOf("/pdf/"));
+            const new_win = openNewWindow(subUrl, event, options, dev, true);
+            remoteMain.enable(new_win.webContents);
         } else {
             event.preventDefault();
             shell.openExternal(url);
@@ -147,7 +152,7 @@ exports.createWindow =  function(i18n, dev = true) {
     return {win: win, splash: splash}
 };
 
-function openNewWindow(subURL, event, options, dev){
+function openNewWindow(subURL, event, options, dev, openBeforeReady = false){
     let finalPath = urlM.format({
         pathname: path.join(__dirname, '/dist/index.html'),
         protocol: 'file:',
@@ -180,6 +185,9 @@ function openNewWindow(subURL, event, options, dev){
 
     let new_win = new BrowserWindow(options)
     remoteMain.enable(new_win.webContents);
+    if(openBeforeReady){
+        new_win.show()
+    }
     new_win.once('ready-to-show', () => {
         new_win.show()
         if (dev) {
@@ -423,4 +431,3 @@ function getMenuAfterAuth (win, i18n) {
 
 exports.getMenuBeforeAuth = getMenuBeforeAuth;
 exports.getMenuAfterAuth = getMenuAfterAuth;
-
