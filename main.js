@@ -93,7 +93,7 @@ app.on('ready', async () => {
         if (mainurl) {
             event.preventDefault();
             let options = {
-                 title: "private-discuss",
+                 title: "Private Discuss",
                  modal: false,
                  // parent: win,
                  width: 1300,
