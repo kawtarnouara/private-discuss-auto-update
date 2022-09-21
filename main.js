@@ -1,4 +1,5 @@
 const {app, BrowserWindow, ipcMain, systemPreferences, protocol, Menu  } = require('electron');
+require('v8-compile-cache');
 const i18n = require('./configs/i18next.config');
 const electron = require('electron');
 const { createWindow, getMenuAfterAuth, getMenuBeforeAuth } = require('./windows');
@@ -91,9 +92,35 @@ app.on('ready', async () => {
     win = result.win;
     remoteMain.enable(win.webContents);
     new Badge(win, {});
-    win.webContents.on('did-finish-load', () => {
+    win.webContents.on('did-finish-load', (event) => {
         if (mainurl) {
-            win.webContents.send('redirect-to-url', mainurl);
+            event.preventDefault();
+           let options = {
+                title: "Piman Discuss",
+                modal: false,
+                // parent: win,
+                width: 1300,
+                height: 800,
+                minWidth: 500,
+                minHeight: 500,
+                webContents: "", // use existing webContents if provided
+                show: false
+            }
+            let new_win = new BrowserWindow(options)
+            remoteMain.enable(new_win.webContents);
+            new_win.once('ready-to-show', () => {
+               // new_win.webContents.send('redirect-to-url', mainurl);
+                new_win.show()
+                if (dev) {
+                    new_win.webContents.openDevTools();
+                }
+            })
+            // if (!options.webContents) {
+            new_win.loadURL(mainurl) // existing webContents will be navigated automatically
+            // }
+            event.newGuest = new_win
+           // win.webContents.send('redirect-to-url', mainurl);
+            //mainurl = args.slice(1)[2];
             mainurl = null;
         }
     });
@@ -133,6 +160,15 @@ exports.getVersionName = () => app.getVersion();
 // app.on('ready', function()  {
 //   autoUpdater.checkForUpdates();
 // });
+
+
+ipcMain.on('get-sources', async (event) => {
+    //   const has_perms = systemPreferences.getMediaAccessStatus('screen');
+     // console.log('has_perms', has_perms);
+       const sources = (await desktopCapturer.getSources({ types: ['screen', 'window'] }))
+         .map(({ name, id, thumbnail }) => ({ name, id, thumbnail: thumbnail.toDataURL() }));
+       event.reply('get-sources-reply', sources);
+});
 
 let currentStatus = null;
 console.error(__dirname);

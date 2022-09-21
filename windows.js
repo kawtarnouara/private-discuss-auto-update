@@ -62,22 +62,22 @@ exports.createWindow =  function(i18n, dev = true) {
 
             console.log(subURL)
 
-            const new_win = openNewWindow(subURL, event, options, dev);
+            const new_win = openNewWindow(subURL, event, options, dev, true);
             remoteMain.enable(new_win.webContents);
             new_win.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
-                if (url.includes('connectivity-test')){
-                    event.preventDefault()
+               if (url.includes('connectivity-test')){
+                   event.preventDefault()
 
-                    console.log(url)
+                   console.log(url)
 
-                    let subURL = 'connectivity-test';
+                   let subURL = 'connectivity-test';
 
-                    console.log(subURL)
+                   console.log(subURL)
 
-                    const connectivity_win = openNewWindow(subURL, event, options, dev);
-                }
+                   const connectivity_win = openNewWindow(subURL, event, options, dev);
+               }
             })
-        } else if(url.startsWith('https://office.private-discuss.com')){
+        } else if(url.startsWith('https://office-piman.private-discuss.com')){
             event.preventDefault();
             Object.assign(options, {
                 title: "Piman Discuss",
@@ -87,7 +87,7 @@ exports.createWindow =  function(i18n, dev = true) {
                 height: 800,
                 minWidth: 500,
                 minHeight: 500,
-                webContents: "", // use existing webContents if provided
+                webContents: '',
                 show: false
             })
 
@@ -103,7 +103,13 @@ exports.createWindow =  function(i18n, dev = true) {
             new_win.loadURL(url) // existing webContents will be navigated automatically
             // }
             event.newGuest = new_win
-        }else {
+        } else if (url.includes('/pdf/')){
+            event.preventDefault();
+            let subUrl = url.substr(url.indexOf("/pdf/"));
+            const new_win = openNewWindow(subUrl, event, options, dev, true);
+            remoteMain.enable(new_win.webContents);
+        }
+        else {
             event.preventDefault();
             shell.openExternal(url);
         }
@@ -151,7 +157,7 @@ exports.createWindow =  function(i18n, dev = true) {
     return {win: win, splash: splash}
 };
 
-function openNewWindow(subURL, event, options, dev){
+function openNewWindow(subURL, event, options, dev, openBeforeReady = false){
     let finalPath = urlM.format({
         pathname: path.join(__dirname, '/dist/index.html'),
         protocol: 'file:',
@@ -164,7 +170,7 @@ function openNewWindow(subURL, event, options, dev){
     // win.webContents.executeJavaScript('localStorage.getItem("jwt_token")').then(function(value){
 
     Object.assign(options, {
-        title: "Private Discuss",
+        title: "Piman Discuss",
         modal: false,
         // parent: win,
         width: 1300,
@@ -184,19 +190,24 @@ function openNewWindow(subURL, event, options, dev){
 
     let new_win = new BrowserWindow(options)
     remoteMain.enable(new_win.webContents);
-    new_win.once('ready-to-show', () => {
+    if(openBeforeReady){
         new_win.show()
+    }
+    new_win.once('ready-to-show', () => {
+        if(!openBeforeReady){
+            new_win.show()
+        }
         if (dev) {
             new_win.webContents.openDevTools();
         }
     })
+   
     // if (!options.webContents) {
     new_win.loadURL(finalPath) // existing webContents will be navigated automatically
     // }
     event.newGuest = new_win
     return new_win;
 }
-
 function downloadManager2(win) {
     win.webContents.session.on('will-download', function(event, downloadItem, webContents){
         "use strict";
