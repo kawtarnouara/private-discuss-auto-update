@@ -1,5 +1,5 @@
 require('v8-compile-cache');
-const {app, BrowserWindow, ipcMain, systemPreferences, protocol, Menu  } = require('electron');
+const {app, BrowserWindow, ipcMain, systemPreferences, protocol, Menu, desktopCapturer  } = require('electron');
 const i18n = require('./configs/i18next.config');
 const electron = require('electron');
 const { createWindow, getMenuAfterAuth, getMenuBeforeAuth } = require('./windows');
