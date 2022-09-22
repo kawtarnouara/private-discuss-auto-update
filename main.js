@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain, systemPreferences, protocol, Menu, ipcRenderer } = require('electron');
+const {app, BrowserWindow, ipcMain, systemPreferences, protocol, Menu, ipcRenderer, desktopCapturer } = require('electron');
 
 const { createWindow, getMenuAfterAuth, getMenuBeforeAuth } = require('./windows');
 const { initUpdater } = require('./updater');
