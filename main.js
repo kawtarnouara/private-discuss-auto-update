@@ -55,6 +55,7 @@ app.on('open-url', function (ev, url) {
 });
 // Create window on electron intialization
 app.on('ready', async () => {
+    app.isQuiting  = false;
     electron.powerMonitor.on('lock-screen', () => {
         if(win){
             win.webContents.send('screen-lock-change', 'lock');
@@ -120,13 +121,20 @@ app.on('ready', async () => {
             mainurl = null;
         }
     });
+    win.on('close', event => {
+        if(app.isQuiting){
+            return;
+        }
+        event.preventDefault();
+        win.hide();
+    })
 });
 
 
 app.on('before-quit', () => {
-    BrowserWindow.getAllWindows().map(window => {
-        window.destroy();
-    });
+    // BrowserWindow.getAllWindows().map(window => {
+    //     window.destroy();
+    // });
 });
 
 // Quit when all windows are closed.
@@ -145,7 +153,13 @@ app.on('activate', async () => {
     // ]);
     if (win === null) {
         win = await createMainWindow(dev)
+    }else{
+        win.show();
     }
+});
+
+app.on('quit', (ev) => {
+    app.isQuiting  = false;
 });
 
 exports.setBadge = (count) => app.badgeCount = (count >= 0) ? count : 0;
