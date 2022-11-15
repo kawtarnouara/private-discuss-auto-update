@@ -99,6 +99,7 @@ exports.initUpdater = (mainWindow) => {
         dialogUpdate.destroy();
         dialogUpdate = null;
         setImmediate(() => {
+            app.isQuiting = true;
             app.removeAllListeners('window-all-closed');
             autoUpdater.quitAndInstall();
         });
