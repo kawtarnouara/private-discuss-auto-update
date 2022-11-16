@@ -333,7 +333,6 @@ function getMenuBeforeAuth(win, i18n) {
             {type: "separator"},
             {
                 label: i18n.t('quit'), accelerator: "Command+Q", click: function () {
-                    app.isQuiting = true;
                     app.quit();
                 }
             }
@@ -400,7 +399,6 @@ function getMenuAfterAuth (win, i18n) {
             {type: "separator"},
             {
                 label: i18n.t('quit'), accelerator: "Command+Q", click: function () {
-                    app.isQuiting = true;
                     app.quit();
                 }
             }
