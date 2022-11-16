@@ -1,4 +1,4 @@
-require('v8-compile-cache');
+//require('v8-compile-cache');
 const {app, BrowserWindow, ipcMain, systemPreferences, protocol, Menu, desktopCapturer  } = require('electron');
 const i18n = require('./configs/i18next.config');
 const electron = require('electron');
@@ -124,9 +124,9 @@ app.on('ready', async () => {
 
 
 app.on('before-quit', () => {
-    // BrowserWindow.getAllWindows().map(window => {
-    //     window.destroy();
-    // });
+    BrowserWindow.getAllWindows().map(window => {
+        window.destroy();
+    });
 });
 
 // Quit when all windows are closed.
@@ -145,8 +145,6 @@ app.on('activate', async () => {
     // ]);
     if (win === null) {
         win = await createMainWindow(dev)
-    }else{
-        win.show();
     }
 });
 

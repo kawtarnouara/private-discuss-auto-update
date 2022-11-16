@@ -188,8 +188,8 @@ exports.getUpdateInfo = getUpdateInfo = (showNoUpdates)  => {
         protocol: 'https:',
     });
     request.on('response', (response) => {
-        console.log(`STATUS: ${response.statusCode} ${JSON.stringify(response)}`);
-        console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
+       console.log(`STATUS: ${response.statusCode} ${JSON.stringify(response)}`);
+       console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
 
         response.on('data', (chunk) => {
             try{
