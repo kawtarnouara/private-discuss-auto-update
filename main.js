@@ -18,7 +18,7 @@ let mainev;
 remoteMain.initialize();
 if (process.platform === 'win32'){
     app.setAsDefaultProtocolClient('private-discuss');
-
+    app.setAppUserModelId('Private Discuss');
     const primaryInstance = app.requestSingleInstanceLock();
     if (!primaryInstance) {
         app.quit();
@@ -27,8 +27,8 @@ if (process.platform === 'win32'){
 
 // The primary instance of the application will run this code, not the new  instance
     app.on('second-instance', (event, args) => {
-        if (args.slice(1) && args.slice(1)[2]){
-            mainurl = args.slice(1)[2]
+        if (args.slice(1) && args.slice(1)[1]){
+            mainurl = args.slice(1)[1]
             if(win){
                 win.webContents.send('open-window', mainurl);
                 mainurl = null;
