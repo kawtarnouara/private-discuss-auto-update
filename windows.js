@@ -77,7 +77,7 @@ exports.createWindow =  function(i18n, dev = true) {
                    const connectivity_win = openNewWindow(subURL, event, options, dev);
                }
             })
-        } else if(url.startsWith('https://office-piman.private-discuss.com')){
+        } else if(url.startsWith('https://document.private-discuss.com')){
             event.preventDefault();
             Object.assign(options, {
                 title: "Piman Discuss",
@@ -359,6 +359,7 @@ function getMenuBeforeAuth(win, i18n) {
             {type: "separator"},
             {
                 label: i18n.t('quit'), accelerator: "Command+Q", click: function () {
+                    app.isQuiting = true;
                     app.quit();
                 }
             }
@@ -428,6 +429,7 @@ function getMenuAfterAuth (win, i18n) {
             {type: "separator"},
             {
                 label: i18n.t('quit'), accelerator: "Command+Q", click: function () {
+                    app.isQuiting = true;
                     app.quit();
                 }
             }
