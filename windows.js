@@ -10,6 +10,7 @@ const remoteMain = require("@electron/remote/main");
 const  openAboutWindow = require("about-window").default;
 exports.createWindow =  function(i18n, dev = true) {
     // Setup permission handler
+
     session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
         return true;
     });
@@ -359,7 +360,6 @@ function getMenuBeforeAuth(win, i18n) {
             {type: "separator"},
             {
                 label: i18n.t('quit'), accelerator: "Command+Q", click: function () {
-                    app.isQuiting = true;
                     app.quit();
                 }
             }
@@ -429,7 +429,6 @@ function getMenuAfterAuth (win, i18n) {
             {type: "separator"},
             {
                 label: i18n.t('quit'), accelerator: "Command+Q", click: function () {
-                    app.isQuiting = true;
                     app.quit();
                 }
             }
