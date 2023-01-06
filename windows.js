@@ -81,7 +81,7 @@ exports.createWindow =  function(i18n, dev = true) {
         } else if(url.startsWith('https://document.private-discuss.com')){
             event.preventDefault();
             Object.assign(options, {
-                title: "Piman Discuss",
+                title: "Private Discuss",
                 modal: false,
                 // parent: win,
                 width: 1300,
@@ -136,7 +136,7 @@ exports.createWindow =  function(i18n, dev = true) {
             nodeIntegration: true
         }
     });
-    splash.loadURL(`file://${__dirname}/assets/splash.html?connection=1`);
+    splash.loadURL(`file://${__dirname}/assets/splash_private.html?connection=1`);
 
     // win.loadURL(`http://openproject.piman2-0.fr`);
 
@@ -171,7 +171,7 @@ function openNewWindow(subURL, event, options, dev, openBeforeReady = false){
     // win.webContents.executeJavaScript('localStorage.getItem("jwt_token")').then(function(value){
 
     Object.assign(options, {
-        title: "Piman Discuss",
+        title: "Private Discuss",
         modal: false,
         // parent: win,
         width: 1300,

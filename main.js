@@ -57,7 +57,6 @@ app.on('open-url', function (ev, url) {
 });
 // Create window on electron intialization
 app.on('ready', async () => {
-    app.isQuiting  = false;
     electron.powerMonitor.on('lock-screen', () => {
         if(win){
             win.webContents.send('screen-lock-change', 'lock');
@@ -97,7 +96,7 @@ app.on('ready', async () => {
         if (mainurl) {
             event.preventDefault();
            let options = {
-                title: "Piman Discuss",
+                title: "Private Discuss",
                 modal: false,
                 // parent: win,
                 width: 1300,
@@ -125,25 +124,15 @@ app.on('ready', async () => {
             mainurl = null;
         }
     });
-    win.on('close', event => {
-        if(app.isQuiting){
-            return;
-        }
-        event.preventDefault();
-        win.hide();
-    })
 });
 
 
 app.on('before-quit', () => {
-    /*BrowserWindow.getAllWindows().map(window => {
+    BrowserWindow.getAllWindows().map(window => {
         window.destroy();
-    });*/
+    });
 });
 
-app.on('quit', (ev) => {
-    app.isQuiting  = false;
-});
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
     // On macOS specific close process
@@ -161,8 +150,6 @@ app.on('activate', async () => {
     if (win === null) {
         win = await createMainWindow(dev)
         new Badge(win, {});
-    }else{
-        win.show();
     }
 });
 
