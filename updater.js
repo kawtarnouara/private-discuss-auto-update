@@ -153,6 +153,17 @@ exports.initUpdater = (mainWindow) => {
                     }
                 }
             });
+            progressBar
+                .on('completed', function() {
+                    console.info(`completed...`);
+                    //  progressBar.detail = 'Task completed. Exiting...';
+                })
+                .on('aborted', function(value) {
+                    console.info(`aborted... ${value}`);
+                })
+                .on('progress', function(value) {
+                    //  progressBar.detail = `Value ${value} out of ${progressBar.getOptions().maxValue}...`;
+                });
         }
     });
 
