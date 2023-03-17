@@ -26,8 +26,8 @@
         }
         .update-btn{
             color: #fff;
-            border-color:  #33C2AF;
-            background-color:  #33C2AF;
+            border-color: #33C2AF;
+            background-color: #33C2AF;
         }
         .cancel-btn{
             margin-right: 10px;
@@ -70,7 +70,8 @@
         </div>
         <div class="button-container">
             <button class="cancel-btn" id="cancel-btn" onclick="cancelUpdate()">Plus tard</button>
-            <button class="update-btn" onclick="updateApp()">Mettre à jour</button>
+            <button class="update-btn" id="auto-update" onclick="updateApp()">Mettre à jour</button>
+            <button class="update-btn" id="manual-update" onclick="downloadApp()">Télécharger l'application</button>
         </div>
     </div>
 
@@ -90,7 +91,6 @@
     }
     const force_update = findGetParameter('force_update');
     const type = document.getElementById('type');
-
     if (force_update.toString() === '1'){
         const cancel = document.getElementById('cancel-btn');
         cancel.style.display = 'none';
@@ -102,7 +102,6 @@
     }else{
         manualUpdateBtn.style.display = 'none';
     }
-
 
     const new_version = document.getElementById('new-version');
     new_version.innerText = findGetParameter('version');
@@ -126,12 +125,12 @@
     function updateApp() {
         ipcRenderer.send('update_app');
     }
+
     function downloadApp(){
         if(findGetParameter('link')){
             ipcRenderer.send('download_app', {url: findGetParameter('link')});
         }
     }
-
 </script>
 </body>
 </html>
