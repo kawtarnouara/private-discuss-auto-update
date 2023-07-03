@@ -52,13 +52,12 @@ exports.createWindow =  function(i18n, dev = true) {
         show: false,
     });
 
-    win.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
+    win.webContents.setWindowOpenHandler((details)  => {
         const openRoom = /\/room\//.test(url);
         const isPublicRoom = /\/public\//.test(url);
         const openConnectivity = url.includes('connectivity-test');
         if (openRoom || openConnectivity) {
             // open window as modal
-            event.preventDefault()
 
             console.log(url)
 
@@ -66,11 +65,10 @@ exports.createWindow =  function(i18n, dev = true) {
 
             console.log(subURL)
 
-            const new_win = openNewWindow(subURL, event, options, dev, true);
+            const new_win = openNewWindow(subURL,  dev, true);
             remoteMain.enable(new_win.webContents);
-            new_win.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
+            new_win.webContents.setWindowOpenHandler((details)  => {
                 if (url.includes('connectivity-test')){
-                    event.preventDefault()
 
                     console.log(url)
 
@@ -78,13 +76,14 @@ exports.createWindow =  function(i18n, dev = true) {
 
                     console.log(subURL)
 
-                    const connectivity_win = openNewWindow(subURL, event, options, dev);
+                    const connectivity_win = openNewWindow(subURL,  dev);
+                    return {action: 'deny'};
                 }
             })
+            return {action: 'deny'};
         } else if(url.startsWith('https://document.private-discuss.com')){
-            event.preventDefault();
-            Object.assign(options, {
-                title: "Piman Discuss",
+            const options =  {
+                title: "Private Discuss",
                 modal: false,
                 // parent: win,
                 width: 1300,
@@ -93,7 +92,7 @@ exports.createWindow =  function(i18n, dev = true) {
                 minHeight: 500,
                 webContents: "", // use existing webContents if provided
                 show: false
-            })
+            };
 
             let new_win = new BrowserWindow(options)
             remoteMain.enable(new_win.webContents);
@@ -106,19 +105,19 @@ exports.createWindow =  function(i18n, dev = true) {
             // if (!options.webContents) {
             new_win.loadURL(url) // existing webContents will be navigated automatically
             // }
-            event.newGuest = new_win
+            return {action: 'deny'};
         } else if (url.includes('/pdf/')){
-            event.preventDefault();
             let subUrl = url.substr(url.indexOf("/pdf/"));
-            const new_win = openNewWindow(subUrl, event, options, dev, true);
+            const new_win = openNewWindow(subUrl,  dev, true);
             remoteMain.enable(new_win.webContents);
+            return {action: 'deny'};
         } else {
-            event.preventDefault();
             shell.openExternal(url);
+            return {action: 'deny'};
         }
     })
 
-    // win.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
+    // win.webContents.setWindowOpenHandler((details)  => {
     //     alert(options);
     // });
     if (dev) {
@@ -160,7 +159,7 @@ exports.createWindow =  function(i18n, dev = true) {
     return {win: win, splash: splash}
 };
 
-function openNewWindow(subURL, event, options, dev, openBeforeReady=false){
+function openNewWindow(subURL,  dev, openBeforeReady = false){
     let finalPath = urlM.format({
         pathname: path.join(__dirname, '/dist/index.html'),
         protocol: 'file:',
@@ -172,7 +171,7 @@ function openNewWindow(subURL, event, options, dev, openBeforeReady=false){
 
     // win.webContents.executeJavaScript('localStorage.getItem("jwt_token")').then(function(value){
 
-    Object.assign(options, {
+    const options =  {
         title: "Private Discuss",
         modal: false,
         // parent: win,
@@ -189,7 +188,7 @@ function openNewWindow(subURL, event, options, dev, openBeforeReady=false){
             nativeWindowOpen: true,
             enableRemoteModule: true
         }
-    })
+    };
 
     let new_win = new BrowserWindow(options)
     remoteMain.enable(new_win.webContents);
@@ -205,10 +204,8 @@ function openNewWindow(subURL, event, options, dev, openBeforeReady=false){
     // if (!options.webContents) {
     new_win.loadURL(finalPath) // existing webContents will be navigated automatically
     // }
-    event.newGuest = new_win
     return new_win;
 }
-
 function downloadManager2(win) {
     win.webContents.session.on('will-download', function(event, downloadItem, webContents){
         "use strict";
