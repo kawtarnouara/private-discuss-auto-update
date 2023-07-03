@@ -163,7 +163,7 @@ function openNewWindow(subURL,  dev, openBeforeReady = false){
 
     // win.webContents.executeJavaScript('localStorage.getItem("jwt_token")').then(function(value){
 
-    constoptions =  {
+    const options =  {
         title: "Private Discuss",
         modal: false,
         // parent: win,
