@@ -45,6 +45,7 @@ exports.createWindow =  function(i18n, dev = true) {
     });
 
     win.webContents.setWindowOpenHandler((details)  => {
+        const url = details.url;
         const openRoom = /\/room\//.test(url);
         const isPublicRoom = /\/public\//.test(url);
         const openConnectivity = url.includes('connectivity-test');
@@ -60,6 +61,7 @@ exports.createWindow =  function(i18n, dev = true) {
             const new_win = openNewWindow(subURL,  dev, true);
             remoteMain.enable(new_win.webContents);
             new_win.webContents.setWindowOpenHandler((details)  => {
+                const url = details.url;
                 if (url.includes('connectivity-test')){
 
                     console.log(url)
