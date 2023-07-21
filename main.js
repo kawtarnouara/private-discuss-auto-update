@@ -5,7 +5,7 @@ const electron = require('electron');
 const { createWindow, getMenuAfterAuth, getMenuBeforeAuth } = require('./windows');
 const { initUpdater } = require('./updater');
 const remoteMain = require("@electron/remote/main");
-
+const TrayGenerator = require('./TrayGenerator');
 let dev = false;
 
 let win;
@@ -120,6 +120,8 @@ app.on('ready', async () => {
             mainurl = null;
         }
     });
+    const Tray = new TrayGenerator(win, i18n);
+    Tray.createTray();
 });
 
 
