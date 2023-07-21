@@ -125,11 +125,11 @@ app.on('ready', async () => {
 });
 
 
-app.on('before-quit', () => {
+/*app.on('before-quit', () => {
     BrowserWindow.getAllWindows().map(window => {
         window.destroy();
     });
-});
+});*/
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -147,6 +147,12 @@ app.on('activate', async () => {
     // ]);
     if (win === null) {
         win = await createMainWindow(dev)
+    } else {
+        try{
+            win.show();
+        } catch (err){
+            console.log(err);
+        }
     }
 });
 
