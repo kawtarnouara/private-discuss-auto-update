@@ -5,9 +5,10 @@ let dialogFile;
 let isDownloading = false;
 var progressBar = null;
 exports.downloadManager = function (win, i18n) {
-    win.on('close', function (event) {
+    app.on('before-quit', (event) =>{
+        app.isQuitting = true;
         if (isDownloading){
-            const choice = require('electron').dialog.showMessageBoxSync(this,
+            const choice = require('electron').dialog.showMessageBoxSync(win,
                 {
                     type: 'question',
                     buttons: [i18n.t('quit'), i18n.t('cancel')],
@@ -21,17 +22,29 @@ exports.downloadManager = function (win, i18n) {
                     progressBar.close();
                     progressBar = null;
                 }
-                app.quit();
+                BrowserWindow.getAllWindows().map(window => {
+                    window.destroy();
+                });
             }
         } else {
-            app.quit();
+            BrowserWindow.getAllWindows().map(window => {
+                window.destroy();
+            });
         }
     });
+
+    win.on('close', function (event) {
+        if (!app.isQuitting) {
+            event.preventDefault();
+            win.hide();
+        }
+    });
+
     ipcMain.on('close_dialog', () => {
-        isDownloading = false;
         if (dialogFile){
             dialogFile.destroy();
             dialogFile = null;
+            isDownloading = false;
         }
     });
     session.defaultSession.on('will-download', function(event, downloadItem, webContents){
@@ -140,7 +153,7 @@ exports.downloadManager = function (win, i18n) {
                      dialogFile = new BrowserWindow({
                         title: "Téléchargement - Private Discuss",
                         width: 500,
-                        height: 170,
+                        height: 200,
                         backgroundColor: '#eeeeee',
                         nodeIntegration: 'iframe',
                         resizable: false,

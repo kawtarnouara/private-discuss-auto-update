@@ -5,6 +5,7 @@ const electron = require('electron');
 const { createWindow, getMenuAfterAuth, getMenuBeforeAuth } = require('./windows');
 const { initUpdater } = require('./updater');
 const Badge = require('electron-windows-badge');
+const TrayGenerator = require('./TrayGenerator');
 
 const remoteMain = require("@electron/remote/main");
 
@@ -124,10 +125,12 @@ app.on('ready', async () => {
             mainurl = null;
         }
     });
+    const Tray = new TrayGenerator(win, i18n);
+    Tray.createTray();
 });
 
 
-app.on('before-quit', () => {
+/*app.on('before-quit', () => {
     BrowserWindow.getAllWindows().map(window => {
         window.destroy();
     });
@@ -139,7 +142,7 @@ app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
         app.quit();
     }
-});
+});*/
 
 app.on('activate', async () => {
     // macOS specific close process
@@ -150,6 +153,12 @@ app.on('activate', async () => {
     if (win === null) {
         win = await createMainWindow(dev)
         new Badge(win, {});
+    } else {
+        try {
+            win.show();
+        } catch (err) {
+            console.log(err);
+        }
     }
 });
 
