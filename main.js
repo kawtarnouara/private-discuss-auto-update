@@ -372,6 +372,9 @@ ipcMain.on('download-btn', (e, args) => {
 ipcMain.on("download", (event, info) => {
     console.log("ipcMain download triggerd");
 });
+
+
+
 ipcMain.on("mouseMove", (event, mouseData) => {
     moveMouse(mouseData, null);
 });
@@ -419,6 +422,7 @@ function getMouseTarget(mouseData) {
     });
 }
 
+
 ipcMain.on("mouseDrag", (event, mouseData) => {
     try {
         getMouseTarget(mouseData)
@@ -462,6 +466,7 @@ ipcMain.on("mouseClick", (event, mouseData) => {
 ipcMain.on("mouseDoubleClick", (event, mouseData) => {
     const callback = (async () => {
         try {
+            await mouse.click(Button.LEFT);
             switch (mouseData.button) {
                 case 'LEFT':
                     await mouse.doubleClick(Button.LEFT);
@@ -481,6 +486,7 @@ ipcMain.on("mouseDoubleClick", (event, mouseData) => {
     moveMouse(mouseData, callback);
 
 });
+
 
 ipcMain.on("mouseScroll", (event, mouseData) => {
     const callback = (async () => {
@@ -574,31 +580,29 @@ ipcMain.on("keyboardRelease", (event, keyboardData) => {
     })();
 });
 
-ipcMain.on("keyboardType", (event, keyboardData) => {
+ipcMain.on("keyboardType", (event, keyboardDatas) => {
     (async () => {
-        try {
-            const stringKey = keyboardData.key === keyboardData.key.toUpperCase() ? keyboardData.key : mapKeyEventToNutJS(keyboardData, !/shift|meta|alt|cmd/.test(keyboardData.code.toLowerCase()));
-            const key = mapKeyEventToNutJS(keyboardData, false);
-            console.log("stringKey ", stringKey);
-            console.log("key ", key);
-
-            if (stringKey) {
-                await keyboard.type(stringKey);
-            } else if (keyboardData.shiftKey) {
-                console.log("key shift", key);
-                await keyboard.pressKey(Key.RightShift, key);
-                await keyboard.releaseKey(Key.RightShift, key);
-            } else if (keyboardData.ctrlKey || keyboardData.metaKey) {
-                console.log("key ctrl/meta", key);
-                await keyboard.pressKey(Key.RightControl, key);
-                await keyboard.releaseKey(Key.RightControl, key);
-            } else if (keyboardData.altKey) {
-                console.log("key alt", key);
-                await keyboard.pressKey(Key.RightAlt, key);
-                await keyboard.releaseKey(Key.RightAlt, key);
+        for (const keyboardData of keyboardDatas) {
+            try {
+                const stringKey = keyboardData.key === keyboardData.key.toUpperCase() ? keyboardData.key : mapKeyEventToNutJS(keyboardData, !/shift|meta|alt|cmd/.test(keyboardData.code.toLowerCase()));
+                const key = mapKeyEventToNutJS(keyboardData, false);
+                console.log("stringKey ", stringKey);
+                if (stringKey) {
+                    await keyboard.type(stringKey);
+                } else if (keyboardData.shiftKey) {
+                    await keyboard.pressKey(Key.RightShift, key);
+                    await keyboard.releaseKey(Key.RightShift, key);
+                } else if (keyboardData.ctrlKey || keyboardData.metaKey) {
+                    await keyboard.pressKey(Key.RightControl, key);
+                    await keyboard.releaseKey(Key.RightControl, key);
+                } else if (keyboardData.altKey) {
+                    console.log("key alt", key);
+                    await keyboard.pressKey(Key.RightAlt, key);
+                    await keyboard.releaseKey(Key.RightAlt, key);
+                }
+            } catch (e) {
+                console.log('key error', e)
             }
-        } catch (e) {
-            console.log('key error', e)
         }
     })();
 
