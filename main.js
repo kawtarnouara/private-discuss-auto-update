@@ -13,7 +13,8 @@ const {
     Button, keyboard, Key, Point
 } = require("@nut-tree/nut-js");
 const remoteMain = require("@electron/remote/main");
-
+const { powerSaveBlocker } = require('electron');
+let blockerId;
 let dev = false;
 
 let win;
@@ -374,6 +375,15 @@ ipcMain.on("download", (event, info) => {
 });
 ipcMain.on("mouseMove", (event, mouseData) => {
     moveMouse(mouseData, null);
+});
+ipcMain.on("powerSaveBlocker", (event, method) => {
+    console.log('powersaveblocker ', method);
+    if (method === 'start') {
+        blockerId = powerSaveBlocker.start('prevent-display-sleep');
+    } else if (method === 'stop' && blockerId !== undefined) {
+        powerSaveBlocker.stop(blockerId);
+        blockerId = undefined;
+    }
 });
 
 function moveMouse(mouseData, callback) {
