@@ -1,4 +1,4 @@
-const {app, BrowserWindow, Menu, session, shell, powerSaveBlocker } = require('electron');
+const {app, BrowserWindow, Menu, session, shell } = require('electron');
 const ProgressBar = require('electron-progressbar');
 const { downloadManager } = require('./download');
 const path = require('path');
@@ -6,7 +6,6 @@ const urlM = require('url');
 const {autoUpdater} = require("electron-updater");
 const {getUpdateInfo } = require('./updater');
 const remoteMain = require("@electron/remote/main");
-let blockerId;
 exports.createWindow =  function(i18n, dev = true) {
     // Setup permission handler
     session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
@@ -75,15 +74,7 @@ exports.createWindow =  function(i18n, dev = true) {
                     return {action: 'deny'};
                 }
             })
-            if (openRoom) {
-                blockerId = powerSaveBlocker.start('prevent-display-sleep');
-                new_win.on('closed',  () => {
-                    if (blockerId !== undefined) {
-                        powerSaveBlocker.stop(blockerId);
-                        blockerId = undefined;
-                    }
-                });
-            }
+
             return {action: 'deny'};
         } else if(url.startsWith('https://document.private-discuss.com')){
             const options =  {
