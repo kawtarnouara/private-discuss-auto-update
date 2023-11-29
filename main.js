@@ -4,6 +4,8 @@ const { createWindow, getMenuAfterAuth, getMenuBeforeAuth } = require('./windows
 const { initUpdater } = require('./updater');
 const i18n = require('./configs/i18next.config');
 const remoteMain = require("@electron/remote/main");
+const { powerSaveBlocker } = require('electron');
+let blockerId;
 let dev = false;
 app.getLocale()
 let win;
@@ -194,3 +196,249 @@ ipcMain.on('download-btn', (e, args) => {
 ipcMain.on("download", (event, info) => {
     console.log("ipcMain download triggerd");
 });
+
+ipcMain.on("powerSaveBlocker", (event, method) => {
+    if (method === 'start') {
+        blockerId = powerSaveBlocker.start('prevent-display-sleep');
+    } else if (method === 'stop' && blockerId !== undefined) {
+        powerSaveBlocker.stop(blockerId);
+        blockerId = undefined;
+    }
+});
+
+ipcMain.on("mouseMove", (event, mouseData) => {
+    moveMouse(mouseData, null);
+});
+
+function moveMouse(mouseData, callback) {
+    try {
+        getMouseTarget(mouseData)
+            .then(async (target) => {
+                console.log("target 2" , target)
+                await mouse.move(straightTo(target));
+                console.log("target 3" , target)
+
+                if (callback) {
+                    callback();
+                }
+            })
+            .catch(error => {
+                // Handle errors here
+                console.error(error);
+            });
+
+    } catch (e) {
+        console.log('mouse error ', e)
+    }
+}
+
+function getMouseTarget(mouseData) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log("mouseData " , mouseData)
+            const width = await screen.width();
+            const height = await screen.height();
+            const ratioX = width / mouseData.clientWidth
+            const ratioY = height / mouseData.clientHeight
+
+            const hostX = mouseData.clientX * ratioX
+            const hostY = mouseData.clientY * ratioY
+            const target = new Point(hostX, hostY);
+            console.log("target " , target)
+            resolve(target);
+        } catch (e) {
+            console.log('mouse error ', e);
+            reject(e);
+        }
+    });
+}
+
+
+ipcMain.on("mouseDrag", (event, mouseData) => {
+    try {
+        getMouseTarget(mouseData)
+            .then(async (target) => {
+                await mouse.drag(straightTo(target));
+
+            })
+            .catch(error => {
+                // Handle errors here
+                console.error(error);
+            });
+
+    } catch (e) {
+        console.log('mouse error ', e)
+    }
+});
+
+ipcMain.on("mouseClick", (event, mouseData) => {
+    const callback = (async () => {
+        try {
+            switch (mouseData.button) {
+                case 'LEFT':
+                    await mouse.leftClick();
+                    break;
+                case 'MIDDLE':
+                    await mouse.click(Button.MIDDLE);
+                    break;
+                case 'RIGHT':
+                    await mouse.rightClick();
+                    break;
+            }
+            console.log('mouse click ', mouseData.button)
+        } catch (e) {
+            console.log('mouse error ', e)
+        }
+
+    });
+    moveMouse(mouseData, callback);
+});
+
+ipcMain.on("mouseDoubleClick", (event, mouseData) => {
+    const callback = (async () => {
+        try {
+            await mouse.click(Button.LEFT);
+            switch (mouseData.button) {
+                case 'LEFT':
+                    await mouse.doubleClick(Button.LEFT);
+                    break;
+                case 'MIDDLE':
+                    await mouse.doubleClick(Button.MIDDLE);
+                    break;
+                case 'RIGHT':
+                    await mouse.doubleClick(Button.RIGHT);
+                    break;
+            }
+        } catch (e) {
+            console.log('mouse error ', e)
+        }
+
+    });
+    moveMouse(mouseData, callback);
+
+});
+
+
+ipcMain.on("mouseScroll", (event, mouseData) => {
+    const callback = (async () => {
+        try {
+            switch (mouseData.position) {
+                case 'LEFT':
+                    await mouse.scrollLeft(mouseData.amount);
+                    break;
+                case 'UP':
+                    await mouse.scrollUp(mouseData.amount);
+                    break;
+                case 'DOWN':
+                    await mouse.scrollDown(mouseData.amount);
+                    break;
+                case 'RIGHT':
+                    await mouse.scrollRight(mouseData.amount);
+                    break;
+            }
+        } catch (e) {
+            console.log('mouse error ', e)
+        }
+
+    });
+    moveMouse(mouseData, callback);
+});
+
+ipcMain.on("mouseRelease", (event, mouseData) => {
+    const callback = (async () => {
+        try {
+            switch (mouseData.button) {
+                case 'LEFT':
+                    await mouse.releaseButton(Button.LEFT);
+                    break;
+                case 'MIDDLE':
+                    await mouse.releaseButton(Button.MIDDLE);
+                    break;
+                case 'RIGHT':
+                    await mouse.releaseButton(Button.RIGHT);
+                    break;
+            }
+        } catch (e) {
+            console.log('mouse error ', e)
+        }
+
+    });
+    moveMouse(mouseData, callback);
+
+});
+
+ipcMain.on("mousePress", (event, mouseData) => {
+    const callback = (async () => {
+        try {
+            switch (mouseData.button) {
+                case 'LEFT':
+                    await mouse.pressButton(Button.LEFT);
+                    break;
+                case 'MIDDLE':
+                    await mouse.pressButton(Button.MIDDLE);
+                    break;
+                case 'RIGHT':
+                    await mouse.pressButton(Button.RIGHT);
+                    break;
+            }
+        } catch (e) {
+            console.log('mouse error ', e)
+        }
+
+    });
+    moveMouse(mouseData, callback);
+});
+
+ipcMain.on("keyboardPress", (event, keyboardData) => {
+    (async () => {
+        try {
+            await keyboard.pressKey(keyboardData.input);
+        } catch (e) {
+            console.log('mouse error ', e)
+        }
+
+    })();
+});
+
+ipcMain.on("keyboardRelease", (event, keyboardData) => {
+    (async () => {
+        try {
+            await keyboard.releaseKey(keyboardData.input, Key.L);
+        } catch (e) {
+            console.log('mouse error ', e)
+        }
+
+    })();
+});
+
+ipcMain.on("keyboardType", (event, keyboardDatas) => {
+    (async () => {
+        for (const keyboardData of keyboardDatas) {
+            try {
+                const stringKey = keyboardData.key === keyboardData.key.toUpperCase() ? keyboardData.key : mapKeyEventToNutJS(keyboardData, !/shift|meta|alt|cmd/.test(keyboardData.code.toLowerCase()));
+                const key = mapKeyEventToNutJS(keyboardData, false);
+                console.log("stringKey ", stringKey);
+                if (stringKey) {
+                    await keyboard.type(stringKey);
+                } else if (keyboardData.shiftKey) {
+                    await keyboard.pressKey(Key.RightShift, key);
+                    await keyboard.releaseKey(Key.RightShift, key);
+                } else if (keyboardData.ctrlKey || keyboardData.metaKey) {
+                    await keyboard.pressKey(Key.RightControl, key);
+                    await keyboard.releaseKey(Key.RightControl, key);
+                } else if (keyboardData.altKey) {
+                    console.log("key alt", key);
+                    await keyboard.pressKey(Key.RightAlt, key);
+                    await keyboard.releaseKey(Key.RightAlt, key);
+                }
+            } catch (e) {
+                console.log('key error', e)
+            }
+        }
+    })();
+
+});
+
+function mapKeyEventToNutJS(keyEvent, canBeString) {
+    return AsciiToNutJSMapping[keyEvent.key] || (canBeString && keyEvent.key !== "Dead" ? keyEvent.key : null);
+}
