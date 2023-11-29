@@ -74,6 +74,15 @@ exports.createWindow =  function(i18n, dev = true) {
                     return {action: 'deny'};
                 }
             })
+            if (openRoom) {
+                blockerId = powerSaveBlocker.start('prevent-display-sleep');
+                new_win.on('closed',  () => {
+                    if (blockerId !== undefined) {
+                        powerSaveBlocker.stop(blockerId);
+                        blockerId = undefined;
+                    }
+                });
+            }
             return {action: 'deny'};
         } else if(url.startsWith('https://document.private-discuss.com')){
             const options =  {
