@@ -1,4 +1,4 @@
-const {app, BrowserWindow, Menu, session, shell } = require('electron');
+const {app, BrowserWindow, Menu, session, shell, powerSaveBlocker } = require('electron');
 const ProgressBar = require('electron-progressbar');
 const { downloadManager } = require('./download');
 const path = require('path');
@@ -6,6 +6,7 @@ const urlM = require('url');
 const {autoUpdater} = require("electron-updater");
 const {getUpdateInfo } = require('./updater');
 const remoteMain = require("@electron/remote/main");
+let blockerId;
 exports.createWindow =  function(i18n, dev = true) {
     // Setup permission handler
     session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
