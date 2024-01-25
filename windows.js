@@ -6,6 +6,7 @@ const urlM = require('url');
 const {autoUpdater} = require("electron-updater");
 const {getUpdateInfo } = require('./updater');
 const remoteMain = require("@electron/remote/main");
+let windowInfos;
 exports.createWindow =  function(i18n, dev = true) {
     // Setup permission handler
     session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
@@ -63,6 +64,9 @@ exports.createWindow =  function(i18n, dev = true) {
                 const mainScreen = electronScreen.getPrimaryDisplay();
                 const { width, height } = mainScreen.workAreaSize;
                 new_win.on('blur', () => {
+                    const windowSize = new_win.getSize();
+                    const windowPosition = new_win.getPosition();
+                    windowInfos = {width: windowSize[0], height: windowSize[1], x: windowPosition[0], y: windowPosition[1]}
                     const smallWindowWidth = 350;
                     const smallWindowHeight = 350;
                     new_win.setMinimumSize(smallWindowWidth, smallWindowHeight);
@@ -76,11 +80,9 @@ exports.createWindow =  function(i18n, dev = true) {
                 });
                 const enlarge = () => {
                     new_win.setMinimumSize(500, 500);
-                    new_win.setSize(1300, 800);
+                    new_win.setSize(windowInfos.width, windowInfos.height);
                     new_win.setAlwaysOnTop(false);
-                    const x = Math.floor((width - 1300) / 2);
-                    const y = Math.floor((height - 800) / 2);
-                    new_win.setPosition(x, y);
+                    new_win.setPosition(windowInfos.x, windowInfos.y);
                     new_win.webContents.send('smaller-room', false);
                 };
                 new_win.on('focus', () => {
