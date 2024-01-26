@@ -187,6 +187,7 @@ if (process.platform === 'win32'){
                 if(win.isMinimized()){
                     win.restore();
                 }
+                win.show();
                 win.focus();
             }
         }
