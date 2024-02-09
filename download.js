@@ -35,7 +35,17 @@ exports.downloadManager = function (win, i18n) {
     win.on('close', function (event) {
         if (!app.isQuitting) {
             event.preventDefault();
-            win.hide();
+            const callback = () => {
+                win.hide();
+            };
+            if (win.isFullScreen()) {
+                win.once('resize', () => {
+                    setTimeout(callback, 600);
+                });
+                win.setFullScreen(false);
+            } else {
+                callback();
+            }
         }
     });
     ipcMain.on('close_dialog', () => {
