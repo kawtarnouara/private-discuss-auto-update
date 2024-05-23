@@ -1,7 +1,7 @@
 {
   "name": "private-discuss",
   "description": "Private Discuss, La solution de communication privee, dediee, sur mesure et chiffree",
-  "version": "7.2.2",
+  "version": "7.2.6",
   "main": "./main.js",
   "author": "PRIVATE DISCUSS <contact@piman-group.fr>",
   "scripts": {
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@electron/remote": "^2.0.1",
-    "@nut-tree/nut-js": "^3.1.2",
+    "@nut-tree-fork/nut-js": "^4.2.1",
     "electron-context-menu": "^0.9.1",
     "electron-dl": "^1.12.0",
     "electron-progressbar": "^1.1.0",
@@ -29,7 +29,7 @@
     "electron": "^28.0.0",
     "electron-builder": "^23.0.2",
     "electron-installer-dmg": "^3.0.0",
-    "electron-notarize": "^1.2.2",
+    "@electron/notarize": "^2.3.2",
     "electron-packager": "^17.1.1",
     "electron-winstaller": "^4.0.0"
   },

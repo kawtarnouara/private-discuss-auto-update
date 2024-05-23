@@ -11,7 +11,7 @@ const {
     screen,
     straightTo,
     Button, keyboard, Key, Point
-} = require("@nut-tree/nut-js");
+} = require("@nut-tree-fork/nut-js");
 const { powerSaveBlocker } = require('electron');
 let blockerId;
 let dev = false;
