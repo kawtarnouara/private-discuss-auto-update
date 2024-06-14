@@ -52,7 +52,7 @@ exports.initUpdater = (mainWindow) => {
         } else {
             updateDialog('Mise à jour - Private Discuss', {
                 title: 'Mise à jour échouée',
-                details: "Impossible de terminer la mises à jour de votre application !",
+                details: "Impossible de terminer la mises à jour de votre application ! " + JSON.stringify(err)  + backendData,
                 withButtons: 0,
                 success: 0
             });
@@ -205,7 +205,8 @@ exports.getUpdateInfo = getUpdateInfo = (showNoUpdates)  => {
         response.on('end', () => {
             const parsed = JSON.parse(finalResponse);
             backendData = parsed.result.data;
-            console.log(`BODY: ${backendData}`)
+            console.log(`BODY: ${JSON.stringify(backendData)}`)
+            console.log(`backendData.type: ${backendData.type}`)
         })
         response.on('error', (error) => {
             console.log('error :' + JSON.stringify(error))
