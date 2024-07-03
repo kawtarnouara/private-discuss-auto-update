@@ -179,7 +179,7 @@ if (process.platform === 'win32'){
 
 // The primary instance of the application will run this code, not the new  instance
     app.on('second-instance', (event, args) => {
-        if (args.slice(1) && args.slice(1)[1]){
+        if (args && args.slice(1) && args.slice(1)[1]){
             mainurl = args.slice(1)[1]
             if(win){
                 win.webContents.send('open-window', mainurl);
@@ -189,6 +189,13 @@ if (process.platform === 'win32'){
                 }
                 win.show();
                 win.focus();
+            }
+        } else {
+            if(win){
+                win.show();
+                win.setVisibleOnAllWorkspaces(true);
+                win.focus();
+                win.setVisibleOnAllWorkspaces(false);
             }
         }
     });
