@@ -8,6 +8,7 @@ var dialogCheckUpdate;
 var showNoUpdatesDialog = false;
 let backendData;
 let autoUpdateVersion;
+
 exports.initUpdater = (mainWindow) => {
     getUpdateInfo(false);
     autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "Yra7hy4NWZPvgsNFWWo_" };
@@ -49,13 +50,6 @@ exports.initUpdater = (mainWindow) => {
         if (backendData && backendData.type === 'auto') {
             backendData.type = 'manual';
             openUpdateModal();
-        } else {
-            updateDialog('Mise à jour - Private Discuss', {
-                title: 'Mise à jour échouée',
-                details: "Impossible de terminer la mises à jour de votre application ! " + JSON.stringify(err)  + backendData,
-                withButtons: 0,
-                success: 0
-            });
         }
     });
     autoUpdater.on('download-progress', (progressObj) => {
