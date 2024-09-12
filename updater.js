@@ -14,7 +14,6 @@ exports.initUpdater = (mainWindow) => {
     autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "Yra7hy4NWZPvgsNFWWo_" };
     autoUpdater.autoInstallOnAppQuit = false;
     autoUpdater.autoDownload = false;
-    autoUpdater.checkForUpdatesAndNotify();
     let progressBar;
     autoUpdater.on('checking-for-update', () => {
         // sendStatusToWindow('Checking for update...');
@@ -22,9 +21,14 @@ exports.initUpdater = (mainWindow) => {
     autoUpdater.on('update-available', (info) => {
         autoUpdateVersion = info.version;
         // mainWindow.webContents.send('update_available');
-        if (backendData && backendData.version.toString() === info.version.toString()){
-            openUpdateModal();
-        } else  if (showNoUpdatesDialog){
+        if (backendData){
+            if (versionCompare(app.getVersion(), backendData.version ) < 0) {
+                if(backendData.version.toString() === info.version.toString()) {
+                    openUpdateModal();
+                    return;
+                }
+            }
+        }    if (showNoUpdatesDialog){
             dialog.showMessageBox({
                 title: 'Private Discuss',
                 message: 'Private Discuss est à jour.',
@@ -46,10 +50,20 @@ exports.initUpdater = (mainWindow) => {
         // mainWindow.webContents.send('update_error');
         if (progressBar){
             progressBar.close();
+            updateDialog('Mise à jour - Piman Discuss', {
+                title: 'Mise à jour échouée',
+                details: "Veuillez réessayer plus tard.",
+                withButtons: 0,
+                success : 0
+            });
         }
         if (backendData && backendData.type === 'auto') {
-            backendData.type = 'manual';
-            openUpdateModal();
+            if (versionCompare(app.getVersion(), backendData.version ) < 0) {
+                if(backendData.version.toString() === info.version.toString()) {
+                    backendData.type = 'manual';
+                    openUpdateModal();
+                }
+            }
         }
     });
     autoUpdater.on('download-progress', (progressObj) => {
@@ -98,7 +112,6 @@ exports.initUpdater = (mainWindow) => {
 
     ipcMain.on('update-app', () => {
         getUpdateInfo(true)
-        autoUpdater.checkForUpdatesAndNotify()
     });
 
     ipcMain.on('update_app', () => {
@@ -152,7 +165,7 @@ function updateDialog(dialogTitle, options) {
         backgroundColor: '#eeeeee',
         nodeIntegration: 'iframe',
         resizable: false,
-        closable: false,
+        closable: true,
         fullscreenable: false,
         alwaysOnTop: true,
         webPreferences: {
@@ -199,8 +212,7 @@ exports.getUpdateInfo = getUpdateInfo = (showNoUpdates)  => {
         response.on('end', () => {
             const parsed = JSON.parse(finalResponse);
             backendData = parsed.result.data;
-            console.log(`BODY: ${JSON.stringify(backendData)}`)
-            console.log(`backendData.type: ${backendData.type}`)
+            autoUpdater.checkForUpdatesAndNotify();
         })
         response.on('error', (error) => {
             console.log('error :' + JSON.stringify(error))
