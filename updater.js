@@ -1,4 +1,4 @@
-const { app, ipcMain } = require('electron');
+const { app, ipcMain, net} = require('electron');
 const {autoUpdater} = require("electron-updater");
 const ProgressBar = require('electron-progressbar');
 const { BrowserWindow } = require('electron')
@@ -8,8 +8,9 @@ var dialogCheckUpdate;
 var showNoUpdatesDialog = false;
 let backendData;
 let autoUpdateVersion;
-
-exports.initUpdater = (mainWindow) => {
+let mainWindow;
+exports.initUpdater = (window) => {
+    mainWindow = window;
     getUpdateInfo(false);
     autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "Yra7hy4NWZPvgsNFWWo_" };
     autoUpdater.autoInstallOnAppQuit = false;
@@ -188,42 +189,51 @@ function updateDialog(dialogTitle, options) {
 exports.getUpdateInfo = getUpdateInfo = (showNoUpdates)  => {
     showNoUpdatesDialog = showNoUpdates;
     const { net } = require('electron')
-    var body = JSON.stringify({ platform: 'desktop', os: 'macos'});
-    let finalResponse = '';
-    const request = net.request({
-        method: 'POST',
-        url: 'https://api-v2.private-discuss.com/v1.0/release/get',
-        protocol: 'https:',
-    });
-    request.on('response', (response) => {
-       console.log(`STATUS: ${response.statusCode} ${JSON.stringify(response)}`);
-       console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
+    mainWindow.webContents
+        .executeJavaScript('({...localStorage});', true)
+        .then(localStorage => {
+            var body = JSON.stringify({ platform: 'desktop', os: 'macos'});
+            let finalResponse = '';
+            const request = net.request({
+                method: 'POST',
+                url: 'https://api-v2.private-discuss.com/v1.0/release/get',
+                protocol: 'https:',
+            });
+            request.on('response', (response) => {
+                console.log(`STATUS: ${response.statusCode} ${JSON.stringify(response)}`);
+                console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
 
-        response.on('data', (chunk) => {
-            try{
-                if (chunk){
-                    finalResponse += chunk.toString()
+                response.on('data', (chunk) => {
+                    try{
+                        if (chunk){
+                            finalResponse += chunk.toString()
 
-                }
-            } catch(e){
+                        }
+                    } catch(e){
 
+                    }
+                });
+                response.on('end', () => {
+                    const parsed = JSON.parse(finalResponse);
+                    backendData = parsed.result.data;
+                    autoUpdater.checkForUpdatesAndNotify();
+                })
+                response.on('error', (error) => {
+                    console.log('error :' + JSON.stringify(error))
+                });
+            });
+            request.on('error', (error) => {
+                console.log('error :' + JSON.stringify(error))
+            });
+            const jwtToken = localStorage['jwt_token'];
+            if (jwtToken) {
+                request.setHeader('Authorization', `Bearer ${jwtToken}`);
             }
+
+            request.setHeader('Content-Type', 'application/json');
+            request.write(body, 'utf-8');
+            request.end();
         });
-        response.on('end', () => {
-            const parsed = JSON.parse(finalResponse);
-            backendData = parsed.result.data;
-            autoUpdater.checkForUpdatesAndNotify();
-        })
-        response.on('error', (error) => {
-            console.log('error :' + JSON.stringify(error))
-        });
-    });
-    request.on('error', (error) => {
-        console.log('error :' + JSON.stringify(error))
-    });
-    request.setHeader('Content-Type', 'application/json');
-    request.write(body, 'utf-8');
-    request.end();
 
 }
 
