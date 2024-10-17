@@ -228,7 +228,7 @@ app.on('ready', async () => {
     });
 
     i18n.on('languageChanged', (lng) => {
-        i18n.off('loaded');
+        changeLang(i18n, lng, win);
 
     });
     result = await createWindow(i18n, dev);
