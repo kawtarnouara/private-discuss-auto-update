@@ -6,7 +6,9 @@ const urlM = require('url');
 const {autoUpdater} = require("electron-updater");
 const {getUpdateInfo } = require('./updater');
 const remoteMain = require("@electron/remote/main");
+const i18n = require("./configs/i18next.config");
 let windowInfos;
+let appliedLang;
 exports.createWindow =  function(i18n, dev = true) {
     // Setup permission handler
     session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
