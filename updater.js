@@ -9,7 +9,8 @@ var dialogCheckUpdate;
 let backendData;
 let autoUpdateVersion;
 const nativeImage = require('electron').nativeImage;
-const dialogImage = nativeImage.createFromPath('./assets/private_icon.png');
+const dialogImage = nativeImage.createFromPath('./assets/private_icon.png')
+
 exports.initUpdater = (mainWindow) => {
     getUpdateInfo(false);
 //s    autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "Yra7hy4NWZPvgsNFWWo_" };
@@ -31,8 +32,8 @@ exports.initUpdater = (mainWindow) => {
             }
         }   if (showNoUpdatesDialog){
             dialog.showMessageBox({
-                title: 'Piman Discuss',
-                message: 'Piman Discuss est à jour.',
+                title: 'Private Discuss',
+                message: 'Private Discuss est à jour.',
                 detail: 'Version ' + app.getVersion()
             });
         }
@@ -54,7 +55,7 @@ exports.initUpdater = (mainWindow) => {
         // mainWindow.webContents.send('update_error');
         if (progressBar){
             progressBar.close();
-            updateDialog('Mise à jour - Piman Discuss', {
+            updateDialog('Mise à jour - Private Discuss', {
                 title: 'Mise à jour échouée',
                 details: "Veuillez réessayer plus tard.",
                 withButtons: 0,
@@ -69,6 +70,7 @@ exports.initUpdater = (mainWindow) => {
                 }
             }
         }
+
     });
     autoUpdater.on('download-progress', (progressObj) => {
         if (progressBar != null) {
@@ -104,6 +106,7 @@ exports.initUpdater = (mainWindow) => {
         dialogUpdate.destroy();
         dialogUpdate = null;
         setImmediate(() => {
+            app.isQuitting = true;
             app.removeAllListeners('window-all-closed');
             autoUpdater.quitAndInstall();
         });
@@ -167,8 +170,33 @@ exports.initUpdater = (mainWindow) => {
             mainWindow.webContents.downloadURL(info.url);
         }
     });
-
 };
+
+
+
+function openUpdateModal() {
+    if (!backendData) {
+        return;
+    }
+    const data = backendData;
+    const version = data.version;
+    const type = data.type || 'auto';
+    const link = data.download_link || null;
+    const description = data.description;
+    let force_update = data.force_update;
+    const oldVersion = app.getVersion();
+    const min_functionning_version = data.min_functionning_version;
+    const isFunctionning = min_functionning_version ? versionCompare(oldVersion, min_functionning_version) : 1;
+    force_update = isFunctionning === -1 ? 1 : force_update;
+    dialogCheckUpdate = checkupdateDialog('', {
+        version: version,
+        old_version: oldVersion,
+        type,
+        link,
+        details: description ? description : '',
+        force_update: force_update,
+    });
+}
 
 function sendStatusToWindow(text) {
     console.log(text);
@@ -230,12 +258,12 @@ exports.getUpdateInfo = getUpdateInfo = (showNoUpdates)  => {
     showNoUpdatesDialog = showNoUpdates;
     const { net } = require('electron')
     var body = JSON.stringify({ platform: 'desktop', os: 'windows'});
+    let finalResponse = '';
     const request = net.request({
         method: 'POST',
-        url: 'https://api-v2.private-discuss.com/v1.0/release/get',
+        url: 'https://api-v2.private-discuss.com/v1.0/release/get' ,
         protocol: 'https:',
     });
-    let finalResponse = '';
     request.on('response', (response) => {
         console.log(`STATUS: ${response.statusCode} ${JSON.stringify(response)}`);
         console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
@@ -269,8 +297,6 @@ exports.getUpdateInfo = getUpdateInfo = (showNoUpdates)  => {
 
 }
 
-
-
 function encodeQueryData(data) {
     const ret = [];
     for (let d in data)
@@ -278,29 +304,6 @@ function encodeQueryData(data) {
     return ret.join('&');
 }
 
-function openUpdateModal() {
-    if (!backendData) {
-        return;
-    }
-    const data = backendData;
-    const version = data.version;
-    const type = data.type || 'auto';
-    const link = data.download_link || null;
-    const description = data.description;
-    let force_update = data.force_update;
-    const oldVersion = app.getVersion();
-    const min_functionning_version = data.min_functionning_version;
-    const isFunctionning = min_functionning_version ? versionCompare(oldVersion, min_functionning_version) : 1;
-    force_update = isFunctionning === -1 ? 1 : force_update;
-    dialogCheckUpdate = checkupdateDialog('', {
-        version: version,
-        old_version: oldVersion,
-        type,
-        link,
-        details: description ? description : '',
-        force_update: force_update,
-    });
-}
 
 function versionCompare(v1, v2, options = {zeroExtend: false, lexicographical: false}) {
     const lexicographical = options && options.lexicographical,
