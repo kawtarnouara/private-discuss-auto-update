@@ -9,6 +9,8 @@ const { dialog } = require('electron')
 const remoteMain = require("@electron/remote/main");
 const  openAboutWindow = require("about-window").default;
 let windowInfos;
+const i18n = require("./configs/i18next.config");
+let appliedLang;
 exports.createWindow =  function(i18n, dev = true) {
     // Setup permission handler
 
