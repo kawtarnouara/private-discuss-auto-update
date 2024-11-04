@@ -10,8 +10,9 @@ let backendData;
 let autoUpdateVersion;
 const nativeImage = require('electron').nativeImage;
 const dialogImage = nativeImage.createFromPath('./assets/private_icon.png')
-
-exports.initUpdater = (mainWindow) => {
+let mainWindow;
+exports.initUpdater = (window) => {
+    mainWindow = window;
     getUpdateInfo(false);
 //s    autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "Yra7hy4NWZPvgsNFWWo_" };
     autoUpdater.autoInstallOnAppQuit = false;
@@ -257,6 +258,10 @@ function checkupdateDialog  (dialogTitle, options)   {
 exports.getUpdateInfo = getUpdateInfo = (showNoUpdates)  => {
     showNoUpdatesDialog = showNoUpdates;
     const { net } = require('electron')
+    win.webContents
+        .executeJavaScript('({...localStorage});', true)
+        .then(localStorage => {
+
     var body = JSON.stringify({ platform: 'desktop', os: 'windows'});
     let finalResponse = '';
     const request = net.request({
@@ -294,7 +299,7 @@ exports.getUpdateInfo = getUpdateInfo = (showNoUpdates)  => {
     request.setHeader('Content-Type', 'application/json');
     request.write(body, 'utf-8');
     request.end();
-
+        });
 }
 
 function encodeQueryData(data) {
