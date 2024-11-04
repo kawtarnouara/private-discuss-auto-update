@@ -330,7 +330,7 @@ ipcMain.on('notification-click', (event) => {
     }
 });
 
-ipcMain.on('language-change', (event, lang) => {
+ipcMain.on('change-language', (event, lang) => {
     changeLang(i18n, lang, win);
 });
 
