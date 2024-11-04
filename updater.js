@@ -258,7 +258,7 @@ function checkupdateDialog  (dialogTitle, options)   {
 exports.getUpdateInfo = getUpdateInfo = (showNoUpdates)  => {
     showNoUpdatesDialog = showNoUpdates;
     const { net } = require('electron')
-    win.webContents
+    mainWindow.webContents
         .executeJavaScript('({...localStorage});', true)
         .then(localStorage => {
 
