@@ -1,12 +1,12 @@
 {
   "name": "private-discuss",
   "description": "Private Discuss, La solution de communication privee, dediee, sur mesure et chiffree",
-  "version": "7.4.1",
+  "version": "7.4.3",
   "main": "./main.js",
   "author": "PRIVATE DISCUSS <contact@piman-group.fr>",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder --publish never",
+    "build": "electron-builder --publish never --mac",
     "deploy": "electron-builder --publish always",
     "dist:linux": "electron-builder --linux"
   },
@@ -26,7 +26,7 @@
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
-    "electron": "^28.0.0",
+    "electron": "^34.0.1",
     "electron-builder": "^23.0.2",
     "electron-installer-dmg": "^3.0.0",
     "@electron/notarize": "^2.3.2",
@@ -37,18 +37,13 @@
     "appId": "com.private.discuss",
     "mac": {
       "target": [
-        {
-          "target": "default",
-          "arch": [
-            "universal"
-          ]
-        }
+        "mas"
       ],
       "category": "productivity",
       "gatekeeperAssess": false,
       "hardenedRuntime": true,
-      "entitlements": "./build/entitlements.mac.plist",
-      "entitlementsInherit": "./build/entitlements.mac.inherit.plist"
+      "entitlements": "build/entitlements.mas.plist",
+      "entitlementsInherit": "build/entitlements.mas.helper.plist"
     },
     "linux": {
       "icon": "build/icons/Icon-512x512.png",
@@ -74,18 +69,6 @@
         ]
       }
     ]
-  },
-  "mac": {
-    "title": "Private Discuss",
-    "hardenedRuntime": true,
-    "gatekeeperAssess": false,
-    "entitlements": "build/entitlements.mac.plist",
-    "afterSign": "/Users/mac/Documents/apps/private-discuss-electron-update/electron/notarize.js",
-    "entitlementsInherit": "build/entitlements.mac.inherit.plist"
-  },
-  "mas": {
-    "entitlements": "build/entitlements.mac.plist",
-    "entitlementsInherit": "build/entitlements.mac.inherit.plist"
   },
   "repository": {
     "type": "git",
