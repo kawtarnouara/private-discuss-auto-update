@@ -39,6 +39,7 @@
       "target": [
         "mas"
       ],
+      "provisioningProfile": "build/embedded.provisionprofile",
       "icon": "build/icon.icns",
       "category": "public.app-category.productivity",
       "gatekeeperAssess": false,
