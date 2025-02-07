@@ -1,7 +1,7 @@
 {
   "name": "private-discuss",
   "description": "Private Discuss, La solution de communication privee, dediee, sur mesure et chiffree",
-  "version": "7.4.5",
+  "version": "7.4.8",
   "main": "./main.js",
   "author": "PRIVATE DISCUSS <contact@piman-group.fr>",
   "scripts": {
@@ -45,7 +45,8 @@
       "gatekeeperAssess": false,
       "hardenedRuntime": true,
       "entitlements": "build/entitlements.mas.plist",
-      "entitlementsInherit": "build/entitlements.mas.helper.plist"
+      "entitlementsInherit": "build/entitlements.mas.helper.plist",
+      "entitlementsLoginHelper": "build/entitlements.mas.helper.plist"
     },
     "linux": {
       "icon": "build/icons/Icon-512x512.png",
