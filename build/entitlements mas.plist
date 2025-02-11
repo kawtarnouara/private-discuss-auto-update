@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- Basic sandbox requirement -->
+  <key>com.apple.security.app-sandbox</key>
+  <true/>
+  
+  <!-- File access -->
+  <key>com.apple.security.files.user-selected.read-write</key>
+  <true/>
+  <key>com.apple.security.files.downloads.read-write</key>
+  <true/>
+  
+  <!-- Media devices -->
+  <key>com.apple.security.device.audio-input</key>
+  <true/>
+  <key>com.apple.security.device.camera</key>
+  <true/>
+  <key>com.apple.security.device.microphone</key>
+  <true/>
+  
+  <!-- Assets -->
+  <key>com.apple.security.assets.pictures.read-write</key>
+  <true/>
+  
+  <!-- Network -->
+  <key>com.apple.security.network.client</key>
+  <true/>
+  
+  <!-- App Groups -->
+  <key>com.apple.security.application-groups</key>
+  <array>
+      <string>group.com.discuss.flows</string>
+  </array>
+
+  <!-- Native modules and JIT -->
+  <key>com.apple.security.cs.allow-jit</key>
+  <true/>
+  <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+  <true/>
+  <key>com.apple.security.cs.allow-dyld-environment-variables</key>
+  <true/>
+  <key>com.apple.security.cs.disable-library-validation</key>
+  <true/>
+  
+  <!-- Temporary exceptions for native modules -->
+  <key>com.apple.security.temporary-exception.files.absolute-path.read-write</key>
+  <array>
+      <string>/Users/*/Library/Containers/com.discuss.flows/Data/</string>
+      <string>/Users/*/Library/Containers/com.discuss.flows/Data/tmp/</string>
+  </array>
+</dict>
+</plist>

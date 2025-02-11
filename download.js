@@ -113,7 +113,7 @@ exports.downloadManager = function (win, i18n) {
                     if (progressBar === null) {
                         progressBar = new ProgressBar({
                             indeterminate: false,
-                            title: 'Téléchargement - Private Discuss',
+                            title: 'Téléchargement - Flows Discuss',
                             text: 'En téléchargement ...',
                             detail: 'Préparation des données ...',
                             closeOnComplete: false,
@@ -159,7 +159,7 @@ exports.downloadManager = function (win, i18n) {
                     let path = downloadItem.getSavePath();
                     progressBar.close();
                      dialogFile = new BrowserWindow({
-                        title: "Téléchargement - Private Discuss",
+                        title: "Téléchargement - Flows Discuss",
                         width: 500,
                         height: 170,
                         backgroundColor: '#eeeeee',

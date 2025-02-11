@@ -166,11 +166,8 @@ for (let i = 48; i <= 57; i++) {  // ASCII for 0-9
 }
 mouse.config.autoDelayMs = 0;
 remoteMain.initialize();
-app.setLoginItemSettings({
-    openAtLogin: true
-});
 if (process.platform === 'win32'){
-    app.setAsDefaultProtocolClient('private-discuss');
+    app.setAsDefaultProtocolClient('discuss-flows');
 
     const primaryInstance = app.requestSingleInstanceLock();
     if (!primaryInstance) {
@@ -209,7 +206,7 @@ app.on('open-url', function (ev, url) {
     }
 });
 // Create window on electron intialization
-app.on('ready', async () => {
+app.on('ready',  () => {
     electron.powerMonitor.on('lock-screen', () => {
         if(win){
             win.webContents.send('screen-lock-change', 'lock');
@@ -231,7 +228,7 @@ app.on('ready', async () => {
         changeLang(i18n, lng, win);
 
     });
-    result = await createWindow(i18n, dev);
+    result =  createWindow(i18n, dev);
     // console.log('result ----------------' , result);
     console.log('token ----------------' , process.env.GH_TOKEN);
     splash = result.splash;
@@ -244,7 +241,7 @@ app.on('ready', async () => {
         if (mainurl) {
             event.preventDefault();
             let options = {
-                 title: "Private Discuss",
+                 title: "Flows Discuss",
                  modal: false,
                  // parent: win,
                  width: 1300,
@@ -297,7 +294,7 @@ app.on('activate', async () => {
     //     { scheme: 'file', privileges: { standard: true, supportFetchAPI: true, secure: true } }
     // ]);
     if (win === null) {
-        win = await createMainWindow(dev)
+        win =  createWindow(dev)
     } else {
         try{
             win.show();
@@ -344,7 +341,7 @@ ipcMain.on('online-status-changed', (event, status) => {
     // console.log(status);
     if (status === 'online' && currentStatus !== 'online') {
     currentStatus = 'online';
-    splash.loadURL(`file://${__dirname}/assets/splash_private.html?connection=1`);
+  //  splash.loadURL(`file://${__dirname}/assets/splash_private.html?connection=1`);
     console.info(`file://${__dirname}/dist/index.html`)
     win.loadURL(`file://${__dirname}/dist/index.html`);
     // win.loadURL(`https://piman.private-discuss.com`);
@@ -360,7 +357,7 @@ ipcMain.on('online-status-changed', (event, status) => {
 });
 } else if (status === 'offline' && currentStatus !== 'offline') {
     currentStatus = 'offline';
-    splash.loadURL(`file://${__dirname}/assets/splash_private.html?connection=0`);
+ //   splash.loadURL(`file://${__dirname}/assets/splash_private.html?connection=0`);
 }
 });
 

@@ -26,7 +26,7 @@ exports.createWindow =  function(i18n, dev = true) {
     let win = new BrowserWindow({
         // width: 600,
         // height: 600,
-        title: "Private Discuss",
+        title: "Flows Discuss",
         // fullscreen: true,
         width: 1400,
         height: 900,
@@ -158,7 +158,7 @@ exports.createWindow =  function(i18n, dev = true) {
             return {action: 'deny'};
         } else if(url.startsWith('https://document.private-discuss.com')){
             const options =  {
-                title: "Private Discuss",
+                title: "Flows Discuss",
                 modal: false,
                 // parent: win,
                 width: 1300,
@@ -204,7 +204,7 @@ exports.createWindow =  function(i18n, dev = true) {
     splash = new BrowserWindow({
         width: 300,
         height: 300,
-        backgroundColor: '#eeeeee',
+        backgroundColor: '#de1e1e',
         frame: false,
         alwaysOnTop: true,
         webPreferences: {
@@ -212,7 +212,7 @@ exports.createWindow =  function(i18n, dev = true) {
             nodeIntegration: true
         }
     });
-    splash.loadURL(`file://${__dirname}/assets/splash_private.html?connection=1`);
+   // splash.loadURL(`file://${__dirname}/assets/splash_private.html?connection=1`);
 
     // win.loadURL(`http://openproject.piman2-0.fr`);
 
@@ -247,7 +247,7 @@ function openNewWindow(subURL,  dev, openBeforeReady = false){
     // win.webContents.executeJavaScript('localStorage.getItem("jwt_token")').then(function(value){
 
     const options =  {
-        title: "Private Discuss",
+        title: "Flows Discuss",
         modal: false,
         // parent: win,
         width: 1300,
@@ -338,7 +338,7 @@ function downloadManager2(win) {
                     if (progressBar === null) {
                         progressBar = new ProgressBar({
                             indeterminate: false,
-                            title: 'Téléchargement - Private Discuss',
+                            title: 'Téléchargement - Flows Discuss',
                             text: 'En téléchargement ...',
                             detail: 'Préparation des données ...',
                             closeOnComplete: false,
@@ -374,7 +374,7 @@ function downloadManager2(win) {
                     let path = downloadItem.getSavePath();
                     progressBar.close();
                     let dialogFile = new BrowserWindow({
-                        title: "Téléchargement - Private Discuss",
+                        title: "Téléchargement - Flows Discuss",
                         width: 500,
                         height: 170,
                         backgroundColor: '#eeeeee',

@@ -1,7 +1,7 @@
 {
-  "name": "private-discuss",
+  "name": "discuss-flows",
   "description": "Private Discuss, La solution de communication privee, dediee, sur mesure et chiffree",
-  "version": "7.4.8",
+  "version": "7.5.30",
   "main": "./main.js",
   "author": "PRIVATE DISCUSS <contact@piman-group.fr>",
   "scripts": {
@@ -26,10 +26,10 @@
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
-    "electron": "^34.0.1",
+    "@electron/notarize": "^2.3.2",
+    "electron": "^34.1.1",
     "electron-builder": "^23.0.2",
     "electron-installer-dmg": "^3.0.0",
-    "@electron/notarize": "^2.3.2",
     "electron-packager": "^17.1.1",
     "electron-winstaller": "^4.0.0"
   },
@@ -39,14 +39,23 @@
       "target": [
         "mas"
       ],
-      "provisioningProfile": "build/embedded.provisionprofile",
       "icon": "build/icon.icns",
       "category": "public.app-category.productivity",
-      "gatekeeperAssess": false,
       "hardenedRuntime": true,
       "entitlements": "build/entitlements.mas.plist",
       "entitlementsInherit": "build/entitlements.mas.helper.plist",
-      "entitlementsLoginHelper": "build/entitlements.mas.helper.plist"
+      "entitlementsLoginHelper": "build/entitlements.mas.helper.plist",
+      "provisioningProfile": "build/embedded.provisionprofile",
+      "extendInfo": {
+        "NSMicrophoneUsageDescription": "Please allow access to your microphone for voice calls",
+        "NSCameraUsageDescription": "Please allow access to your camera for video calls"
+      },
+      "helperBundleId": "com.discuss.flows.loginhelper",
+      "asarUnpack": [
+        "**/*.node",
+        "**/node_modules/nut-js/**/*",
+        "**/node_modules/@nut-tree/**/*"
+      ]
     },
     "linux": {
       "icon": "build/icons/Icon-512x512.png",
@@ -62,13 +71,12 @@
       "output": "app",
       "buildResources": "build"
     },
-    "productName": "Private Discuss",
-    "afterSign": "/Users/mac/Documents/apps/private-discuss-electron-update/electron/notarize.js",
+    "productName": "Flows Discuss",
     "protocols": [
       {
-        "name": "Private discuss",
+        "name": "Flows Discuss",
         "schemes": [
-          "private-discuss"
+          "discuss-flows"
         ]
       }
     ]

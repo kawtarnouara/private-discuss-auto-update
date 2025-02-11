@@ -31,8 +31,8 @@ exports.initUpdater = (window) => {
             }
         }    if (showNoUpdatesDialog){
             dialog.showMessageBox({
-                title: 'Private Discuss',
-                message: 'Private Discuss est à jour.',
+                title: 'Flows Discuss',
+                message: 'Flows Discuss est à jour.',
                 detail: 'Version ' + app.getVersion()
             });
         }
@@ -40,8 +40,8 @@ exports.initUpdater = (window) => {
     autoUpdater.on('update-not-available', () => {
         if (showNoUpdatesDialog){
             dialog.showMessageBox({
-                title: 'Private Discuss',
-                message: 'Private Discuss est à jour.',
+                title: 'Flows Discuss',
+                message: 'Flows Discuss est à jour.',
                 detail: 'Version ' + app.getVersion()
             });
         }
@@ -87,7 +87,7 @@ exports.initUpdater = (window) => {
         if (progressBar){
             progressBar.close();
         }
-         dialogUpdate = updateDialog('Mise à jour - Private Discuss', {
+         dialogUpdate = updateDialog('Mise à jour - Flows Discuss', {
             title: 'Mise à jour terminée',
             details: "Votre application a été mise à jour. Vous devez redémarrer l'application maintenant",
             withButtons: 1,
@@ -122,7 +122,7 @@ exports.initUpdater = (window) => {
         if (!progressBar) {
             progressBar = new ProgressBar({
                 indeterminate: false,
-                title: 'Mise à jour - Private Discuss',
+                title: 'Mise à jour - Flows Discuss',
                 text: 'En téléchargement ...',
                 detail: 'Préparation de la nouvelle version ...',
                 closeOnComplete: false,
