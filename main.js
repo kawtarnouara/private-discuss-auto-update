@@ -154,9 +154,19 @@ ipcMain.on('setBadge', (event, count) => {
 ipcMain.on('get-sources', async (event) => {
     //   const has_perms = systemPreferences.getMediaAccessStatus('screen');
      // console.log('has_perms', has_perms);
-       const sources = (await desktopCapturer.getSources({ types: ['screen', 'window'] }))
-         .map(({ name, id, thumbnail }) => ({ name, id, thumbnail: thumbnail.toDataURL() }));
-       event.reply('get-sources-reply', sources);
+    const sources = (await desktopCapturer.getSources({ types: ['screen', 'window'] }))
+        .map(source => ({
+            ...source,
+            thumbnail: source.thumbnail.toDataURL()
+        }))
+        .sort((a, b) => {
+            const isScreenA = a.id.startsWith('screen:');
+            const isScreenB = b.id.startsWith('screen:');
+            if (isScreenA && !isScreenB) return -1;
+            if (!isScreenA && isScreenB) return 1;
+            return 0;
+        });
+    event.reply('get-sources-reply', sources);
 });
 ipcMain.on('online-status-changed', (event, status) => {
     console.log('on -----');
